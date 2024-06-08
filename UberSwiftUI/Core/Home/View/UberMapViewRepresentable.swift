@@ -24,7 +24,8 @@ struct UberMapViewRepresentable : UIViewRepresentable {
     
     func updateUIView(_ uiView: UIViewType, context: Context) {
         if let coordinate =  viewModel.selectedLocationCoordinate2D {
-            print("🗺️ the coordinate is selcted is \(coordinate)")
+            context.coordinator.addAndSelectAnnotation(withCoordinate: coordinate)
+//            print("🗺️ the coordinate is selcted is \(coordinate)")
         }
     }
     
@@ -37,13 +38,16 @@ struct UberMapViewRepresentable : UIViewRepresentable {
 
 extension UberMapViewRepresentable {
     class MapCoordinator: NSObject, MKMapViewDelegate {
+        //MARK: - Properties
         let parent : UberMapViewRepresentable
         
+        //MARK: - INIT
         init(parent: UberMapViewRepresentable) {
             self.parent = parent
             super.init()
         }
 
+        //MARK: - MKMapViewDelegate
         // This method is called whenever the user's location is updated.
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
             // Extract the user's current coordinates from the userLocation object.
@@ -58,6 +62,29 @@ extension UberMapViewRepresentable {
             
             // Set the map view to the specified region, with animation enabled for a smooth transition.
             parent.mapView.setRegion(region, animated: true)
+        }
+        
+        
+        
+        //MARK: - Helpers
+        
+        //MARK: addAndSelectAnnotation
+        /// Adds and selects a map annotation at the specified coordinate.
+        /// - Parameter coordinate: The coordinate where the annotation will be placed.
+        func addAndSelectAnnotation(withCoordinate coordinate: CLLocationCoordinate2D) {
+            // Remove all the annotations exsist befor add another
+            parent.mapView.removeAnnotations(parent.mapView.annotations)
+            
+            // Create a new MKPointAnnotation
+            let annotation = MKPointAnnotation()
+            // Set its coordinate
+            annotation.coordinate = coordinate
+            // Add the annotation to the map view
+            parent.mapView.addAnnotation(annotation)
+            // Select the annotation, causing it to be displayed with a callout
+            parent.mapView.selectAnnotation(annotation, animated: true)
+            
+            parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)
         }
     }
 }
