@@ -10,7 +10,7 @@ import MapKit
 
 struct UberMapViewRepresentable : UIViewRepresentable {
     let mapView = MKMapView()
-    let locationManager = LocationManager()
+    let locationManager = LocationManager.shared
     @Binding var mapState: MapViewState
     @EnvironmentObject private var viewModel : LocationSearchViewModel
     
@@ -24,7 +24,7 @@ struct UberMapViewRepresentable : UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        print("🚀 map state is \(mapState)")
+//        print("🚀 map state is \(mapState)")
         
         switch mapState {
         case .noInput:
@@ -33,10 +33,13 @@ struct UberMapViewRepresentable : UIViewRepresentable {
         case .searchingForLocation:
             break
         case .locationSelected:
-            if let coordinate =  viewModel.selectedLocationCoordinate2D {
+            print("🚀 add the Annotation")
+            if let coordinate =  viewModel.selectedUberLocation?.coordinate {
                 context.coordinator.addAndSelectAnnotation(withCoordinate: coordinate)
                 context.coordinator.configurePolyline(withDestinationCoordinate: coordinate)
             }
+            break
+        case .polylineAdded:
             break
         }
     }
@@ -136,12 +139,12 @@ extension UberMapViewRepresentable {
             
             
             // Retrieve the route from the user's location to the destination coordinate
-            getDestinationRoute(from: userLocationCoordinate, to: coordinate) { route in
+            parent.viewModel.getDestinationRoute(from: userLocationCoordinate, to: coordinate) { route in
                 // Add the route's polyline as an overlay on the map view
                 //                self.parent.mapView.removeOverlays(self.parent.mapView.overlays)
                 
                 self.parent.mapView.addOverlay(route.polyline)
-                
+                self.parent.mapState = .polylineAdded
                 // if we want to shift the map when some view show in the bottom of the map
                 let rect = self.parent.mapView.mapRectThatFits(route.polyline.boundingMapRect,
                                                                edgePadding: .init(top: 64, left: 32, bottom: 500, right: 32))
@@ -150,43 +153,8 @@ extension UberMapViewRepresentable {
         }
         
         
-        /// Retrieves the route from the user's location to the destination coordinate.
-        /// - Parameters:
-        ///   - userLocation: The coordinate representing the user's location.
-        ///   - destinationCoordinate: The coordinate representing the destination location.
-        ///   - completion: A closure to be called with the calculated route.
-        func getDestinationRoute(from userLocation: CLLocationCoordinate2D,
-                                 to destinationCoordinate: CLLocationCoordinate2D,
-                                 completion: @escaping (MKRoute) -> Void) {
-            
-            // Create placemarks for the user's location and destination
-            let userPlacemark = MKPlacemark(coordinate: userLocation)
-            let destinationPlacemark = MKPlacemark(coordinate: destinationCoordinate)
-            
-            // Create a directions request
-            let request = MKDirections.Request()
-            request.source = MKMapItem(placemark: userPlacemark)
-            request.destination = MKMapItem(placemark: destinationPlacemark)
-            
-            // Create a directions object and calculate the route
-            let directions = MKDirections(request: request)
-            directions.calculate { response, error in
-                if let error = error {
-                    // Handle error if route calculation fails
-                    print("🙀 Failed to get direction with error: \(error.localizedDescription)")
-                    return
-                }
-                
-                // Retrieve the first route from the response
-                guard let route = response?.routes.first else {
-                    print("🛑 No routes found")
-                    return
-                }
-                
-                // Call the completion handler with the calculated route
-                completion(route)
-            }
-        }
+        //getDestinationRoute use to be here
+        
         
         
         /// Clears all annotations and overlays from the map view and recenters to the user's current location if available.

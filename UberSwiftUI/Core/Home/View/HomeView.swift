@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var mapState = MapViewState.noInput
+    @EnvironmentObject var locationViewModel: LocationSearchViewModel
     
     var body: some View {
         ZStack (alignment: .bottom) {
@@ -26,7 +27,7 @@ struct HomeView: View {
                                 mapState = .searchingForLocation
                             }
                         }
-                } else if mapState == .searchingForLocation {
+                } else if mapState == .searchingForLocation  {
                     LocationSearchView(mapState: $mapState)
                 }
 
@@ -36,7 +37,7 @@ struct HomeView: View {
             }
             
             
-            if mapState == .locationSelected {
+            if mapState == .locationSelected  || mapState == .polylineAdded  {
                 RideRequestView()
                     .transition(.asymmetric(
                         insertion: .move(edge: .bottom),
@@ -45,7 +46,11 @@ struct HomeView: View {
             
         }
         .ignoresSafeArea(edges: .bottom)
-        
+        .onReceive(LocationManager.shared.$userLocation) { location in
+            if let location = location {
+                locationViewModel.userLocation = location
+            }
+        }
     }
 }
 
