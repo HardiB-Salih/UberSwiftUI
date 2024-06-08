@@ -107,7 +107,7 @@ extension UberMapViewRepresentable {
             // Select the annotation, causing it to be displayed with a callout
             parent.mapView.selectAnnotation(annotation, animated: true)
             
-            parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)
+//            parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)
         }
         
         
@@ -141,6 +141,11 @@ extension UberMapViewRepresentable {
                 //                self.parent.mapView.removeOverlays(self.parent.mapView.overlays)
                 
                 self.parent.mapView.addOverlay(route.polyline)
+                
+                // if we want to shift the map when some view show in the bottom of the map
+                let rect = self.parent.mapView.mapRectThatFits(route.polyline.boundingMapRect,
+                                                               edgePadding: .init(top: 64, left: 32, bottom: 500, right: 32))
+                self.parent.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
             }
         }
         

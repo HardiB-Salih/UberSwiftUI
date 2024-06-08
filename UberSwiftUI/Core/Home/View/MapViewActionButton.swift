@@ -12,10 +12,9 @@ struct MapViewActionButton: View {
     
     var body: some View {
         Button(action: {
-            withAnimation (.spring()) {
+            withAnimation (.spring) {
                 actionForState(mapState)
             }
-            
             
         }, label: {
             Image(systemName: mapState == .noInput ?  "line.3.horizontal" : "arrow.left")
