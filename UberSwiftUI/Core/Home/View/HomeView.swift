@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct HomeView: View {
+    let userItem: UserItem
     @State private var mapState = MapViewState.noInput
     @EnvironmentObject var locationViewModel: LocationSearchViewModel
     
     var body: some View {
         ZStack (alignment: .bottom) {
+            
             ZStack (alignment: .top){
                 UberMapViewRepresentable(mapState: $mapState)
                     .ignoresSafeArea()
-                
+        
                 
                 if mapState == .noInput {
                     LocationSearchActivationView()
@@ -33,7 +35,7 @@ struct HomeView: View {
 
                 MapViewActionButton(mapState: $mapState)
                     .padding(.leading)
-
+                
             }
             
             
@@ -55,5 +57,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(userItem: .placeholder)
 }

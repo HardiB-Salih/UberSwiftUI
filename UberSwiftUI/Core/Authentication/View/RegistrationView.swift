@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct RegistrationView: View {
-    @State var email = ""
-    @State var fullname = ""
-    @State var password = ""
+    @ObservedObject var authVM : AuthViewModel
+    @Environment(\.dismiss) private var dismiss
     
     
     var body: some View {
@@ -20,7 +19,7 @@ struct RegistrationView: View {
             
             VStack (alignment: .leading, spacing: 50) {
                 
-                Button(action: {}, label: {
+                Button(action: { dismiss() }, label: {
                     Image(systemName: "arrow.left")
                         .font(.title)
                         .imageScale(.medium)
@@ -38,13 +37,15 @@ struct RegistrationView: View {
                 
                 
                 VStack (spacing: 32){
-                    CustomTextField(text: $fullname, title: "Full Name", placeholder: "Enter your Fullname")
-                    CustomTextField(text: $email, title: "Email Address", placeholder: "email @example.com")
-                    CustomTextField(text: $password, title: "Password", placeholder: "Enter Your Password", isSecureField: true)
+                    CustomTextField(text: $authVM.fullname, title: "Fullname", placeholder: "Enter your fullname")
+                    CustomTextField(text: $authVM.email, title: "Email Address", placeholder: "email @example.com")
+                    CustomTextField(text: $authVM.password, title: "Password", placeholder: "Enter Your Password", isSecureField: true)
                 }
                 
                 //MARK: Signin Button
-                Button(action: {}, label: {
+                Button(action: {
+                    Task { try await authVM.handleSignUp() }
+                }, label: {
                     Text("SIGN UP")                    
                         .foregroundColor(Color(.secondarySystemBackground))
                         .frame(height: 44)
@@ -52,17 +53,27 @@ struct RegistrationView: View {
                         .background(Color(.label))
                         .clipShape(RoundedRectangle(cornerRadius: 15.0, style: .continuous))
                 })
+                .disabled(authVM.disableSignupButton)
+                .opacity(authVM.disableSignupButton ? 0.5 : 1)
                 
                 Spacer()
-                
-
             }
             .padding()
+            // Show the CustomProgressView when isLoading is true
+            if authVM.isLoading {
+                CustomProgressView()
+                    .transition(.asymmetric(
+                        insertion: .opacity.combined(with: .offset(y: 10)),
+                        removal: .opacity.combined(with: .offset(y: -10))
+                    ))
+                    .zIndex(1) // Ensure it appears on top of other content
+            }
         }
+        .animation(.easeInOut, value: authVM.isLoading)
         
     }
 }
 
-#Preview {
-    RegistrationView()
-}
+//#Preview {
+//    RegistrationView(authVM: AuthViewModel())
+//}

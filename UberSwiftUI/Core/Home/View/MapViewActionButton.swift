@@ -37,6 +37,7 @@ struct MapViewActionButton: View {
         switch state {
         case .noInput:
             print("☎️ noInput")
+            Task { try? await AuthService.shared.logOut() }
         case .searchingForLocation:
             mapState = .noInput
         case .locationSelected, .polylineAdded:
