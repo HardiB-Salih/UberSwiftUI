@@ -16,10 +16,10 @@ extension String {
         return self.isEmpty && !self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
-    func toInt() -> Int? { return Int(self) }
-    func toDouble() -> Double? { return Double(self) }
-    func toFloat() -> Float? { return Float(self) }
-    func toBool() -> Bool? { return Bool(self) }
+    func toInt() -> Int { return Int(self) ?? 0 }
+    func toDouble() -> Double { return Double(self) ?? 0 }
+    func toFloat() -> Float { return Float(self) ?? 0 }
+    func toBool() -> Bool { return Bool(self) ?? false }
 
     func toDate(format: String) -> Date? {
         let dateFormatter = DateFormatter()

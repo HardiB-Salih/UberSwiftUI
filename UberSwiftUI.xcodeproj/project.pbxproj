@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D5333A922C15D92700E7FB6A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D5333A912C15D92700E7FB6A /* Kingfisher */; };
+		D5333A952C15E19000E7FB6A /* SwttingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5333A942C15E19000E7FB6A /* SwttingsView.swift */; };
 		D56670722C157BF400A2FAF2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D56670712C157BF400A2FAF2 /* GoogleService-Info.plist */; };
 		D56670762C157D9200A2FAF2 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D56670752C157D9200A2FAF2 /* FirebaseAuth */; };
 		D56670782C157DA300A2FAF2 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D56670772C157DA300A2FAF2 /* FirebaseFirestore */; };
@@ -20,6 +22,7 @@
 		D566708D2C158B7A00A2FAF2 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D566708C2C158B7A00A2FAF2 /* String.swift */; };
 		D566708F2C158B9700A2FAF2 /* ToSomething.swift in Sources */ = {isa = PBXBuildFile; fileRef = D566708E2C158B9700A2FAF2 /* ToSomething.swift */; };
 		D56670942C159AB600A2FAF2 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56670932C159AB600A2FAF2 /* CustomProgressView.swift */; };
+		D56670992C15ACFC00A2FAF2 /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56670982C15ACFC00A2FAF2 /* SideMenuView.swift */; };
 		D5A92CD92C14270B00E6952E /* UberSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A92CD82C14270B00E6952E /* UberSwiftUIApp.swift */; };
 		D5A92CDD2C14270E00E6952E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5A92CDC2C14270E00E6952E /* Assets.xcassets */; };
 		D5A92CE02C14270E00E6952E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5A92CDF2C14270E00E6952E /* Preview Assets.xcassets */; };
@@ -41,9 +44,12 @@
 		D5A92D172C14E7F800E6952E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A92D162C14E7F800E6952E /* LoginView.swift */; };
 		D5A92D192C14E80C00E6952E /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A92D182C14E80C00E6952E /* RegistrationView.swift */; };
 		D5BB0F3E2C150145008EF19D /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BB0F3D2C150145008EF19D /* CustomTextField.swift */; };
+		D5D381372C15C3A900EBB02F /* SideMenuOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D381362C15C3A900EBB02F /* SideMenuOption.swift */; };
+		D5D381392C15D87C00EBB02F /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D381382C15D87C00EBB02F /* RoundedImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D5333A942C15E19000E7FB6A /* SwttingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwttingsView.swift; sourceTree = "<group>"; };
 		D56670712C157BF400A2FAF2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D566707E2C157F5300A2FAF2 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		D56670802C15816400A2FAF2 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -53,6 +59,7 @@
 		D566708C2C158B7A00A2FAF2 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D566708E2C158B9700A2FAF2 /* ToSomething.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSomething.swift; sourceTree = "<group>"; };
 		D56670932C159AB600A2FAF2 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
+		D56670982C15ACFC00A2FAF2 /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 		D5A92CD52C14270B00E6952E /* UberSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5A92CD82C14270B00E6952E /* UberSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberSwiftUIApp.swift; sourceTree = "<group>"; };
 		D5A92CDC2C14270E00E6952E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -75,6 +82,8 @@
 		D5A92D162C14E7F800E6952E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D5A92D182C14E80C00E6952E /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 		D5BB0F3D2C150145008EF19D /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		D5D381362C15C3A900EBB02F /* SideMenuOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuOption.swift; sourceTree = "<group>"; };
+		D5D381382C15D87C00EBB02F /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,12 +95,21 @@
 				D566707C2C157DAC00A2FAF2 /* FirebaseStorage in Frameworks */,
 				D56670782C157DA300A2FAF2 /* FirebaseFirestore in Frameworks */,
 				D566707A2C157DA300A2FAF2 /* FirebaseFirestoreSwift in Frameworks */,
+				D5333A922C15D92700E7FB6A /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D5333A932C15E17800E7FB6A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D5333A942C15E19000E7FB6A /* SwttingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		D56670742C157D9200A2FAF2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,8 +162,33 @@
 			isa = PBXGroup;
 			children = (
 				D56670932C159AB600A2FAF2 /* CustomProgressView.swift */,
+				D5D381382C15D87C00EBB02F /* RoundedImageView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		D56670952C15ACC200A2FAF2 /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				D56670972C15ACDF00A2FAF2 /* ViewModel */,
+				D56670962C15ACD800A2FAF2 /* View */,
+			);
+			path = SideMenu;
+			sourceTree = "<group>";
+		};
+		D56670962C15ACD800A2FAF2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D56670982C15ACFC00A2FAF2 /* SideMenuView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D56670972C15ACDF00A2FAF2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		D5A92CCC2C14270B00E6952E = {
@@ -195,6 +238,7 @@
 				D5A92D012C14668000E6952E /* MapViewState.swift */,
 				D5A92D062C149D9F00E6952E /* RideType.swift */,
 				D5A92D0D2C14BB1300E6952E /* UberLocation.swift */,
+				D5D381362C15C3A900EBB02F /* SideMenuOption.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -222,6 +266,8 @@
 		D5A92CE92C14272800E6952E /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				D5333A932C15E17800E7FB6A /* Settings */,
+				D56670952C15ACC200A2FAF2 /* SideMenu */,
 				D56670922C159AA900A2FAF2 /* Components */,
 				D56670822C1581AD00A2FAF2 /* Root */,
 				D5A92D132C14E7CF00E6952E /* Authentication */,
@@ -358,6 +404,7 @@
 				D56670772C157DA300A2FAF2 /* FirebaseFirestore */,
 				D56670792C157DA300A2FAF2 /* FirebaseFirestoreSwift */,
 				D566707B2C157DAC00A2FAF2 /* FirebaseStorage */,
+				D5333A912C15D92700E7FB6A /* Kingfisher */,
 			);
 			productName = UberSwiftUI;
 			productReference = D5A92CD52C14270B00E6952E /* UberSwiftUI.app */;
@@ -389,6 +436,7 @@
 			mainGroup = D5A92CCC2C14270B00E6952E;
 			packageReferences = (
 				D56670732C157D3400A2FAF2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D5333A902C15D92700E7FB6A /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = D5A92CD62C14270B00E6952E /* Products */;
 			projectDirPath = "";
@@ -424,8 +472,10 @@
 				D5A92D122C14C59E00E6952E /* Color.swift in Sources */,
 				D5BB0F3E2C150145008EF19D /* CustomTextField.swift in Sources */,
 				D5A92CF22C14296800E6952E /* LocationManager.swift in Sources */,
+				D5D381372C15C3A900EBB02F /* SideMenuOption.swift in Sources */,
 				D566707F2C157F5300A2FAF2 /* AuthService.swift in Sources */,
 				D5A92D052C14882700E6952E /* RideRequestView.swift in Sources */,
+				D5333A952C15E19000E7FB6A /* SwttingsView.swift in Sources */,
 				D5A92D092C14AC0300E6952E /* Double.swift in Sources */,
 				D5A92D022C14668000E6952E /* MapViewState.swift in Sources */,
 				D5A92CFA2C14383D00E6952E /* MapViewActionButton.swift in Sources */,
@@ -439,8 +489,10 @@
 				D5A92CF02C1427CB00E6952E /* UberMapViewRepresentable.swift in Sources */,
 				D5A92CEE2C14279100E6952E /* HomeView.swift in Sources */,
 				D56670812C15816400A2FAF2 /* AuthViewModel.swift in Sources */,
+				D56670992C15ACFC00A2FAF2 /* SideMenuView.swift in Sources */,
 				D5A92CF82C14325600E6952E /* LocationSearchActivationView.swift in Sources */,
 				D5A92CFE2C143DA400E6952E /* LocationSearchResultCell.swift in Sources */,
+				D5D381392C15D87C00EBB02F /* RoundedImageView.swift in Sources */,
 				D5A92D072C149D9F00E6952E /* RideType.swift in Sources */,
 				D56670942C159AB600A2FAF2 /* CustomProgressView.swift in Sources */,
 				D566708B2C1584A600A2FAF2 /* UserItem.swift in Sources */,
@@ -651,6 +703,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D5333A902C15D92700E7FB6A /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.11.0;
+			};
+		};
 		D56670732C157D3400A2FAF2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -662,6 +722,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D5333A912C15D92700E7FB6A /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5333A902C15D92700E7FB6A /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		D56670752C157D9200A2FAF2 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D56670732C157D3400A2FAF2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
