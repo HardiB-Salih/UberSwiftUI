@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct LocationSearchResultView: View {
     @StateObject var viewModel: LocationSearchViewModel
     let config : LocationViewResultConfig
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {

@@ -10,10 +10,11 @@ import MapKit
 import SwiftUI
 import MapKit
 import Combine
+import Firebase
 
 enum LocationViewResultConfig {
     case ride
-    case saveLocation
+    case saveLocation(String)
 }
 
 
@@ -62,22 +63,30 @@ extension LocationSearchViewModel {
     /// Select a location based on the given MKLocalSearchCompletion.
     /// - Parameter localSearch: The MKLocalSearchCompletion object representing the selected location.
     func selectLocation(_ localSearch: MKLocalSearchCompletion, config:  LocationViewResultConfig) {
-        switch config {
-        case .ride:
-            locationSearch(forLocalSearchCompletion: localSearch) { [weak self ] response, error in
-                guard let self else { return }
-                if let error = error {
-                    print("🙀 Location search faild with error \(error.localizedDescription)")
-                    return
-                }
-                guard let item = response?.mapItems.first else { return }
-                let coordinate = item.placemark.coordinate
-                self.selectedUberLocation = UberLocation(title: localSearch.title,
-                                                         coordinate: coordinate)
-                //                print("🗺️ Location coordinate is \(coordinate)")
+        
+        locationSearch(forLocalSearchCompletion: localSearch) { [weak self ] response, error in
+            guard let self else { return }
+            if let error = error {
+                print("🙀 Location search faild with error \(error.localizedDescription)")
+                return
             }
-        case .saveLocation:
-            print("Save Location Here...")
+            guard let item = response?.mapItems.first else { return }
+            let coordinate = item.placemark.coordinate
+            
+            
+            switch config {
+            case .ride:
+                self.selectedUberLocation = UberLocation(title: localSearch.title, coordinate: coordinate)
+                // print("🗺️ Location coordinate is \(coordinate)")
+            case .saveLocation(let key):
+                print("🗺️ Saved Location coordinate is \(key)")
+                let savedLocation = SavedLocation(title: localSearch.title,
+                                       addess: localSearch.subtitle,
+                                       coordinates: GeoPoint(latitude: coordinate.latitude, longitude: coordinate.longitude))
+                Task {
+                    await AuthService.shared.saveLocation(withKey: key, savedLocation: savedLocation)
+                }
+            }
         }
     }
     

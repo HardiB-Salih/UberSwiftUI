@@ -38,4 +38,13 @@ enum SaveLocationViewModel: Int, CaseIterable, Identifiable {
             return "archivebox.circle.fill"
         }
     }
+    
+    var key: String {
+        switch self {
+        case .home:
+            return "homeLocation"
+        case .word:
+            return "workLocation"
+        }
+    }
 }

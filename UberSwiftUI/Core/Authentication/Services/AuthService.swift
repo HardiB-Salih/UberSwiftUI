@@ -84,13 +84,24 @@ protocol AuthProvider {
     /// - Throws: An error if the account creation fails.
     func createAccount(for username: String, email: String, password: String) async throws
     
+    /// Saves the user location information to the database.
+    ///
+    /// - Parameters:
+    ///   - key: The key under which the location information will be saved.
+    ///   - savedLocation: The location information to be saved.
+    func saveLocation(withKey key: String, savedLocation: SavedLocation) async
+    
     /// Logs out the current user, updating the authentication state.
     ///
     /// - Throws: An error if the logout process fails.
     func logOut() async throws
+    
+    
 }
 
 final class AuthService: AuthProvider {
+    
+    
     
     private init(){
         Task { await autoLogin() }
@@ -134,6 +145,19 @@ final class AuthService: AuthProvider {
             print("🔐 Faild To Create An Account: \(error.localizedDescription)")
             throw AuthError.accountCreationFailed(description: error.localizedDescription)
             
+        }
+    }
+    
+    
+    func saveLocation(withKey key: String, savedLocation: SavedLocation) async {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        guard let encodeSavedLocation = try? Firestore.Encoder().encode(savedLocation) else { return }
+        
+        do {
+            try await Firestore.firestore().collection("users").document(currentUid).updateData([key: encodeSavedLocation])
+            fetchCurrentUserInfo()
+        } catch {
+            print("🔐 Failed to update user location info: \(error.localizedDescription)")
         }
     }
     

@@ -34,7 +34,7 @@ struct SettingsView: View {
             Section("Faverates") {
                 ForEach(SaveLocationViewModel.allCases) { viewModel in
                     NavigationLink {
-                        SaveLocationSearchView()
+                        SaveLocationSearchView(config: viewModel)
                     } label: {
                         SettingCell(title: viewModel.title,
                                     iconName: viewModel.iconName,
@@ -68,6 +68,9 @@ struct SettingsView: View {
                         .foregroundStyle(Color(.label))
                 })
             }
+        }
+        .onAppear {
+            print("SettingsView user is: \(userItem)")
         }
         
     }

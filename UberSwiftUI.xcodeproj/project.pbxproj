@@ -12,6 +12,7 @@
 		D5333A982C15FA0000E7FB6A /* SaveLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5333A972C15FA0000E7FB6A /* SaveLocationViewModel.swift */; };
 		D5333A9A2C15FDC200E7FB6A /* SaveLocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5333A992C15FDC200E7FB6A /* SaveLocationSearchView.swift */; };
 		D5333A9C2C16060300E7FB6A /* LocationSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5333A9B2C16060300E7FB6A /* LocationSearchResultView.swift */; };
+		D5333A9E2C160FBE00E7FB6A /* SavedLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5333A9D2C160FBE00E7FB6A /* SavedLocations.swift */; };
 		D56670722C157BF400A2FAF2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D56670712C157BF400A2FAF2 /* GoogleService-Info.plist */; };
 		D56670762C157D9200A2FAF2 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D56670752C157D9200A2FAF2 /* FirebaseAuth */; };
 		D56670782C157DA300A2FAF2 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D56670772C157DA300A2FAF2 /* FirebaseFirestore */; };
@@ -56,6 +57,7 @@
 		D5333A972C15FA0000E7FB6A /* SaveLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveLocationViewModel.swift; sourceTree = "<group>"; };
 		D5333A992C15FDC200E7FB6A /* SaveLocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveLocationSearchView.swift; sourceTree = "<group>"; };
 		D5333A9B2C16060300E7FB6A /* LocationSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchResultView.swift; sourceTree = "<group>"; };
+		D5333A9D2C160FBE00E7FB6A /* SavedLocations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedLocations.swift; sourceTree = "<group>"; };
 		D56670712C157BF400A2FAF2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D566707E2C157F5300A2FAF2 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		D56670802C15816400A2FAF2 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -168,7 +170,6 @@
 		D56670892C15849A00A2FAF2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				D566708A2C1584A600A2FAF2 /* UserItem.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -250,10 +251,12 @@
 		D5A92CE62C14271D00E6952E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D566708A2C1584A600A2FAF2 /* UserItem.swift */,
 				D5A92D012C14668000E6952E /* MapViewState.swift */,
 				D5A92D062C149D9F00E6952E /* RideType.swift */,
 				D5A92D0D2C14BB1300E6952E /* UberLocation.swift */,
 				D5D381362C15C3A900EBB02F /* SideMenuOption.swift */,
+				D5333A9D2C160FBE00E7FB6A /* SavedLocations.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				D566707F2C157F5300A2FAF2 /* AuthService.swift in Sources */,
 				D5A92D052C14882700E6952E /* RideRequestView.swift in Sources */,
 				D5333A982C15FA0000E7FB6A /* SaveLocationViewModel.swift in Sources */,
+				D5333A9E2C160FBE00E7FB6A /* SavedLocations.swift in Sources */,
 				D5333A952C15E19000E7FB6A /* SettingsView.swift in Sources */,
 				D5A92D092C14AC0300E6952E /* Double.swift in Sources */,
 				D5A92D022C14668000E6952E /* MapViewState.swift in Sources */,
