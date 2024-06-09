@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct SideMenuView: View {
-    let userItem: UserItem
+    private let userItem: UserItem
+    
+    init(userItem: UserItem) {
+        self.userItem = userItem
+    }
+    
     
     let gradientColors = [
         Color(hex: "#F58529"),
@@ -72,7 +77,13 @@ struct SideMenuView: View {
         .padding()
         .background(Color.theme.backgroundColor)
         .navigationDestination(for: SideMenuOption.self) { option in
-            Text(option.title)
+            switch option {
+            case .settings:
+                SettingsView(userItem: userItem)
+                    .navigationBarBackButtonHidden()
+            default:
+                Text(option.title)
+            }
         }
     }
 }

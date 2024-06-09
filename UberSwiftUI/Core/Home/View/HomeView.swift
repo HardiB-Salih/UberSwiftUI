@@ -13,6 +13,10 @@ struct HomeView: View {
     @State private var mapState = MapViewState.noInput
     @EnvironmentObject var locationViewModel: LocationSearchViewModel
     
+    init(userItem: UserItem) {
+        self.userItem = userItem
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -61,7 +65,7 @@ extension HomeView {
                             }
                         }
                 } else if mapState == .searchingForLocation  {
-                    LocationSearchView(mapState: $mapState)
+                    LocationSearchView()
                 }
                 
                 MapViewActionButton(mapState: $mapState, showSideMenu: $showSideMenu)
@@ -82,6 +86,13 @@ extension HomeView {
         .onReceive(LocationManager.shared.$userLocation) { location in
             if let location = location {
                 locationViewModel.userLocation = location
+            }
+        }
+        .onReceive(locationViewModel.$selectedUberLocation) { location in
+            if location != nil {
+                withAnimation(.spring) {
+                    self.mapState = .locationSelected
+                }
             }
         }
     }

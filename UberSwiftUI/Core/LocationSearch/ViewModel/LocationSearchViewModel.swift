@@ -7,11 +7,15 @@
 
 import Foundation
 import MapKit
-
-
 import SwiftUI
 import MapKit
 import Combine
+
+enum LocationViewResultConfig {
+    case ride
+    case saveLocation
+}
+
 
 class LocationSearchViewModel: NSObject, ObservableObject {
     @Published var results = [MKLocalSearchCompletion]()
@@ -36,7 +40,7 @@ class LocationSearchViewModel: NSObject, ObservableObject {
     }
     
     
-
+    
     
 }
 
@@ -55,9 +59,11 @@ extension LocationSearchViewModel: MKLocalSearchCompleterDelegate {
 // MARK: - Helper Methods
 extension LocationSearchViewModel {
     
-        /// Select a location based on the given MKLocalSearchCompletion.
-        /// - Parameter localSearch: The MKLocalSearchCompletion object representing the selected location.
-        func selectLocation(_ localSearch: MKLocalSearchCompletion) {
+    /// Select a location based on the given MKLocalSearchCompletion.
+    /// - Parameter localSearch: The MKLocalSearchCompletion object representing the selected location.
+    func selectLocation(_ localSearch: MKLocalSearchCompletion, config:  LocationViewResultConfig) {
+        switch config {
+        case .ride:
             locationSearch(forLocalSearchCompletion: localSearch) { [weak self ] response, error in
                 guard let self else { return }
                 if let error = error {
@@ -68,28 +74,31 @@ extension LocationSearchViewModel {
                 let coordinate = item.placemark.coordinate
                 self.selectedUberLocation = UberLocation(title: localSearch.title,
                                                          coordinate: coordinate)
-//                print("🗺️ Location coordinate is \(coordinate)")
+                //                print("🗺️ Location coordinate is \(coordinate)")
             }
+        case .saveLocation:
+            print("Save Location Here...")
         }
+    }
+    
+    /// Perform a location search based on the given MKLocalSearchCompletion.
+    /// - Parameters:
+    ///   - localSearch: The MKLocalSearchCompletion object representing the search query.
+    ///   - completion: A completion handler called when the search results are available.
+    func locationSearch(forLocalSearchCompletion localSearch: MKLocalSearchCompletion,
+                        completion: @escaping MKLocalSearch.CompletionHandler) {
         
-        /// Perform a location search based on the given MKLocalSearchCompletion.
-        /// - Parameters:
-        ///   - localSearch: The MKLocalSearchCompletion object representing the search query.
-        ///   - completion: A completion handler called when the search results are available.
-        func locationSearch(forLocalSearchCompletion localSearch: MKLocalSearchCompletion,
-                            completion: @escaping MKLocalSearch.CompletionHandler) {
-            
-            let searchRequest = MKLocalSearch.Request()
-            searchRequest.naturalLanguageQuery = "\(localSearch.title) \(localSearch.subtitle) \(localSearch.description)"
-            
-            let search = MKLocalSearch(request: searchRequest)
-            search.start(completionHandler: completion)
-        }
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = "\(localSearch.title) \(localSearch.subtitle) \(localSearch.description)"
+        
+        let search = MKLocalSearch(request: searchRequest)
+        search.start(completionHandler: completion)
+    }
     
     
     /**
      Computes the total price of the ride based on the type of ride and the distance between the user's location and the selected destination.
-
+     
      - Parameter type: The type of ride selected (e.g., uberX, uberBlack, uberXL).
      - Returns: The total price of the ride in the corresponding currency. If the user's location or selected destination is not available, returns 0.0.
      */
