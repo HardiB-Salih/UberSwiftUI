@@ -11,9 +11,8 @@ struct HomeView: View {
     let userItem: UserItem
     @State private var showSideMenu = false
     @State private var mapState = MapViewState.noInput
-    @EnvironmentObject var locationViewModel: LocationSearchViewModel
-    @EnvironmentObject var homeViewModel : HomeViewModel
-    
+    @EnvironmentObject var homeViewModel: HomeViewModel
+
     init(userItem: UserItem) {
         self.userItem = userItem
     }
@@ -86,16 +85,21 @@ extension HomeView {
         .ignoresSafeArea(edges: .bottom)
         .onReceive(LocationManager.shared.$userLocation) { location in
             if let location = location {
-                locationViewModel.userLocation = location
+                homeViewModel.userLocation = location
             }
         }
-        .onReceive(locationViewModel.$selectedUberLocation) { location in
+        .onReceive(homeViewModel.$selectedUberLocation) { location in
             if location != nil {
                 withAnimation(.spring) {
                     self.mapState = .locationSelected
                 }
             }
         }
+//        .onReceive(LocationManager.shared.$userLocation) { location in
+//            if let location = location {
+//                homeViewModel.userLocation = location
+//            }
+//        }
     }
 }
 

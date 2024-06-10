@@ -15,6 +15,7 @@ struct RoundedImageView: View {
     var size: Size
     var shape: ImageShape
     var fallbackImage: String = "person.fill"
+    var backgroundColor: UIColor = .systemGray6
     
     //MARK: - Computed Properties
     var cornerRadius : CGFloat {
@@ -29,11 +30,13 @@ struct RoundedImageView: View {
     //MARK: - INIT
     init(_ profileImageUrl: String? = nil,
          size: Size,
-         shape: ImageShape, fallbackImage: String = "person.fill") {
+         shape: ImageShape, fallbackImage: String = "person.fill",
+         backgroundColor: UIColor = .systemGray6) {
         self.profileImageUrl = profileImageUrl
         self.size = size
         self.shape = shape
         self.fallbackImage = fallbackImage
+        self.backgroundColor = backgroundColor
     }
     
     //MARK: - View
@@ -43,7 +46,7 @@ struct RoundedImageView: View {
                 .resizable()
                 .placeholder({ ProgressView() })
                 .scaledToFill()
-                .background(Color(.systemGray6))
+                .background(Color(backgroundColor))
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
                 .frame(width: size.dimension, height: size.dimension)
         } else {
@@ -153,4 +156,9 @@ private struct SizeDimensions {
     static let xLarge: CGFloat = 100
     /// Dimension for extra extra large size (120)
     static let xxLarge: CGFloat = 120
+}
+
+extension String {
+    static let placeholderImageUrl = "https://i.ibb.co/PWpShpY/profile-pic.png"
+
 }

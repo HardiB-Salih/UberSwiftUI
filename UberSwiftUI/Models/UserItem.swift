@@ -20,7 +20,7 @@ struct UserItem: Identifiable, Codable {
     
     var accountType: AccountType
     var coordinates: GeoPoint
-   
+    var city: String
     
     var homeLocation: SavedLocation?
     var workLocation: SavedLocation?
@@ -38,5 +38,5 @@ struct UserItem: Identifiable, Codable {
 
 
 extension UserItem {
-    static let placeholder = UserItem(uid: UUID().uuidString, fullname: "John Doe", email: "john.doe@test.com", accountType: .passenger, coordinates: GeoPoint(latitude: 40.74688, longitude: 31.622133))
+    static let placeholder = UserItem(uid: UUID().uuidString, fullname: "John Doe", email: "john.doe@test.com", accountType: .passenger, coordinates: GeoPoint(latitude: 40.74688, longitude: 31.622133), city: "Bolu")
 }

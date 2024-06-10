@@ -12,9 +12,9 @@ struct UberMapViewRepresentable : UIViewRepresentable {
     let mapView = MKMapView()
     let locationManager = LocationManager.shared
     @Binding var mapState: MapViewState
-    @EnvironmentObject private var viewModel : LocationSearchViewModel
-    @EnvironmentObject private var homeViewModel : HomeViewModel
-
+    @EnvironmentObject private var viewModel : HomeViewModel
+//    let homeViewModel : HomeViewModel
+    
     
     func makeUIView(context: Context) -> some UIView {
         mapView.delegate = context.coordinator
@@ -26,13 +26,13 @@ struct UberMapViewRepresentable : UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIViewType, context: Context) {
-//        print("🚀 map state is \(mapState)")
+        //        print("🚀 map state is \(mapState)")
         
         switch mapState {
         case .noInput:
             context.coordinator.clearMapViewAndRecenterUserLoacation()
-//            print("🚀 drivers on map \(homeViewModel.drivers)")
-            context.coordinator.addDriversToMap(drivers: homeViewModel.drivers)
+            //            print("🚀 drivers on map \(homeViewModel.drivers)")
+            context.coordinator.addDriversToMap(drivers: viewModel.drivers)
             break
         case .searchingForLocation:
             break
@@ -114,7 +114,7 @@ extension UberMapViewRepresentable {
             // Select the annotation, causing it to be displayed with a callout
             parent.mapView.selectAnnotation(annotation, animated: true)
             
-//            parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)
+            //            parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)
         }
         
         
@@ -187,7 +187,7 @@ extension UberMapViewRepresentable {
                     view = dequeuedView
                 } else {
                     view = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                    let driverAnnotationView = DriverAnnotationViewRepresentable(annotation: annotation, 
+                    let driverAnnotationView = DriverAnnotationViewRepresentable(annotation: annotation,
                                                                                  rideTypeImage: rideTypeImage)
                     let hostingController = UIHostingController(rootView: driverAnnotationView)
                     view.addSubview(hostingController.view)

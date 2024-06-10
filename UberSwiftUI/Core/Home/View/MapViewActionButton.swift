@@ -10,7 +10,7 @@ import SwiftUI
 struct MapViewActionButton: View {
     @Binding var mapState : MapViewState
     @Binding var showSideMenu : Bool
-    @EnvironmentObject var viewModel: LocationSearchViewModel
+    @EnvironmentObject var viewModel: HomeViewModel
     
     
     var body: some View {

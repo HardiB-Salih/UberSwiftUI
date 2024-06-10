@@ -34,7 +34,7 @@ struct SettingsView: View {
             Section("Faverates") {
                 ForEach(SaveLocationViewModel.allCases) { viewModel in
                     NavigationLink {
-                        SaveLocationSearchView(config: viewModel)
+                        SaveLocationSearchView(userItem: userItem, config: viewModel)
                     } label: {
                         SettingCell(title: viewModel.title,
                                     iconName: viewModel.iconName,
@@ -69,10 +69,6 @@ struct SettingsView: View {
                 })
             }
         }
-        .onAppear {
-            print("SettingsView user is: \(userItem)")
-        }
-        
     }
 }
 

@@ -83,14 +83,14 @@ protocol AuthProvider {
     ///   - email: The email address of the user.
     ///   - password: The desired password.
     /// - Throws: An error if the account creation fails.
-    func createAccount(for username: String, email: String, password: String, userLocation: CLLocationCoordinate2D) async throws
+    func createAccount(for username: String, email: String, password: String, userLocation: CLLocationCoordinate2D, cityName: String) async throws
     
     /// Saves the user location information to the database.
     ///
     /// - Parameters:
     ///   - key: The key under which the location information will be saved.
     ///   - savedLocation: The location information to be saved.
-    func saveLocation(withKey key: String, savedLocation: SavedLocation) async
+//    func saveLocation(withKey key: String, savedLocation: SavedLocation) async
     
     /// Logs out the current user, updating the authentication state.
     ///
@@ -128,7 +128,7 @@ final class AuthService: AuthProvider {
     func login(with email: String, password: String) async throws {
         do {
             let authResult = try await Auth.auth().signIn(withEmail: email, password: password)
-            fetchCurrentUserInfo()
+            startListeningToCurrentUserInfo()
             print("🙋‍♂️ \(authResult.user.email ?? "") is Logged In")
         } catch {
             print("🔐 Faild To Log in: \(error.localizedDescription)")
@@ -136,9 +136,9 @@ final class AuthService: AuthProvider {
         }
     }
     
-    func createAccount(for fullname: String, email: String, password: String, userLocation: CLLocationCoordinate2D) async throws {
+    func createAccount(for fullname: String, email: String, password: String, userLocation: CLLocationCoordinate2D, cityName: String) async throws {
         print("User Location: \(userLocation.latitude), \(userLocation.longitude)")
-
+ 
         do {
             // invoke firebase create account method: store the suer in out firebase auth
             let authResult = try await Auth.auth().createUser(withEmail: email, password: password)
@@ -148,7 +148,8 @@ final class AuthService: AuthProvider {
                                    fullname: fullname,
                                    email: email,
                                    accountType: .driver,
-                                   coordinates: GeoPoint(latitude: userLocation.latitude, longitude: userLocation.longitude))
+                                   coordinates: GeoPoint(latitude: userLocation.latitude, longitude: userLocation.longitude),
+                                   city: cityName)
             
             try await saveUserInfoDatabase(user: newUser)
             
@@ -158,18 +159,6 @@ final class AuthService: AuthProvider {
             print("🔐 Faild To Create An Account: \(error.localizedDescription)")
             throw AuthError.accountCreationFailed(description: error.localizedDescription)
             
-        }
-    }
-    
-    
-    func saveLocation(withKey key: String, savedLocation: SavedLocation) async {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        guard let encodeSavedLocation = try? Firestore.Encoder().encode(savedLocation) else { return }
-        
-        do {
-            try await Firestore.firestore().collection("users").document(currentUid).updateData([key: encodeSavedLocation])
-        } catch {
-            print("🔐 Failed to update user location info: \(error.localizedDescription)")
         }
     }
     
@@ -193,21 +182,6 @@ extension AuthService {
         } catch {
             print("🔐 Faild to save user info to Database: \(error.localizedDescription)")
             throw AuthError.failedToSaveUserInfo(description: error.localizedDescription)
-        }
-    }
-    
-    private func fetchCurrentUserInfo() {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        let USER_REF = Firestore.firestore().collection("users")
-        USER_REF.document(currentUid).getDocument(as: UserItem.self) { [ weak self ] result in
-            switch result {
-            case .success(let loggedInUser):
-                //This is publish the user information
-                self?.authState.send(.loggedIn(loggedInUser))
-                print("🙋‍♂️ \(loggedInUser.fullname) is Logged In")
-            case .failure(let error):
-                print("🔐 Faild to get current user Info: \(error.localizedDescription)")
-            }
         }
     }
     

@@ -15,8 +15,9 @@ struct RootScreen: View {
         case .pending:
             ProgressView()
                 .controlSize(.large)
-        case .loggedIn(let userItem ):
+        case .loggedIn(let userItem):
             HomeView(userItem: userItem)
+                .environmentObject(HomeViewModel(currentUser: userItem))
         case .loggedOut:
             LoginView()
         }
