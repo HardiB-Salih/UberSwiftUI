@@ -176,16 +176,31 @@ extension UberMapViewRepresentable {
         }
         
         
-        
-        func addDriversToMap(drivers: [UserItem]) {
-            drivers.forEach { user in
-                let coordinate = CLLocationCoordinate2D(latitude: user.coordinates.latitude, longitude: user.coordinates.longitude)
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                parent.mapView.addAnnotation(annotation)
+        //MARK: - Add Custom Annotation
+        func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
+            if let annotation = annotation as? DriverAnnotation {
+                let identifier = "driver"
+                guard let rideTypeImage = annotation.driver.rideTypeImage else { return nil }
+                var view: MKAnnotationView
+                if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) {
+                    dequeuedView.annotation = annotation
+                    view = dequeuedView
+                } else {
+                    view = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                    let driverAnnotationView = DriverAnnotationViewRepresentable(annotation: annotation, 
+                                                                                 rideTypeImage: rideTypeImage)
+                    let hostingController = UIHostingController(rootView: driverAnnotationView)
+                    view.addSubview(hostingController.view)
+                }
+                
+                return view
             }
+            return nil
         }
         
-        
+        func addDriversToMap(drivers: [UserItem]) {
+            let annotations = drivers.map({ DriverAnnotation(driver: $0)})
+            self.parent.mapView.addAnnotations(annotations)
+        }
     }
 }

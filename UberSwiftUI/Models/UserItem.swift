@@ -17,14 +17,17 @@ struct UserItem: Identifiable, Codable {
     let uid: String
     let fullname: String
     let email: String
+    
     var accountType: AccountType
     var coordinates: GeoPoint
+   
     
     var homeLocation: SavedLocation?
     var workLocation: SavedLocation?
     
     var bio: String? = nil
     var profileImageUrl: String? = nil
+    var rideTypeImage: String? = nil
     
     var id: String {
         return uid
