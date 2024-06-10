@@ -11,8 +11,8 @@ import SwiftUI
 class LocationManager : NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
     static let shared = LocationManager()
-    @Published var userLocation: CLLocation?
-    
+    @Published var userLocation: CLLocationCoordinate2D?
+
     override init() {
         super.init()
         
@@ -26,12 +26,9 @@ class LocationManager : NSObject, ObservableObject {
 extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locateion = locations.first else { return }
-        userLocation = locateion
+        self.userLocation = locateion.coordinate
         
         locationManager.stopUpdatingLocation()
     }
 }
-
-
-
 

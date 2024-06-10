@@ -11,6 +11,7 @@ import FirebaseAuth
 import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import MapKit
 
 //MARK: -ENUMs
 enum AuthState {
@@ -82,7 +83,7 @@ protocol AuthProvider {
     ///   - email: The email address of the user.
     ///   - password: The desired password.
     /// - Throws: An error if the account creation fails.
-    func createAccount(for username: String, email: String, password: String) async throws
+    func createAccount(for username: String, email: String, password: String, userLocation: CLLocationCoordinate2D) async throws
     
     /// Saves the user location information to the database.
     ///
@@ -135,7 +136,9 @@ final class AuthService: AuthProvider {
         }
     }
     
-    func createAccount(for fullname: String, email: String, password: String) async throws {
+    func createAccount(for fullname: String, email: String, password: String, userLocation: CLLocationCoordinate2D) async throws {
+        print("User Location: \(userLocation.latitude), \(userLocation.longitude)")
+
         do {
             // invoke firebase create account method: store the suer in out firebase auth
             let authResult = try await Auth.auth().createUser(withEmail: email, password: password)
@@ -145,7 +148,7 @@ final class AuthService: AuthProvider {
                                    fullname: fullname,
                                    email: email,
                                    accountType: .driver,
-                                   coordinates: GeoPoint(latitude: 40.74688, longitude: 31.622133))
+                                   coordinates: GeoPoint(latitude: userLocation.latitude, longitude: userLocation.longitude))
             
             try await saveUserInfoDatabase(user: newUser)
             
@@ -192,8 +195,6 @@ extension AuthService {
             throw AuthError.failedToSaveUserInfo(description: error.localizedDescription)
         }
     }
-    
-    
     
     private func fetchCurrentUserInfo() {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }

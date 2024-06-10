@@ -21,11 +21,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct UberSwiftUIApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var locationSearchViewModel = LocationSearchViewModel()
+    @StateObject private var homeViewModel = HomeViewModel()
+
 
     var body: some Scene {
         WindowGroup {
             RootScreen()
                 .environmentObject(locationSearchViewModel)
+                .environmentObject(homeViewModel)
         }
     }
 }

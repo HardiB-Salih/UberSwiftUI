@@ -70,6 +70,11 @@ struct RegistrationView: View {
             }
         }
         .animation(.easeInOut, value: authVM.isLoading)
+        .onReceive(LocationManager.shared.$userLocation) { location in
+            if let location = location {
+                authVM.userLocation = location
+            }
+        }
         
     }
 }

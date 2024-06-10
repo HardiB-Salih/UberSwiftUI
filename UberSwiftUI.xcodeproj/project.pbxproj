@@ -27,6 +27,7 @@
 		D566708F2C158B9700A2FAF2 /* ToSomething.swift in Sources */ = {isa = PBXBuildFile; fileRef = D566708E2C158B9700A2FAF2 /* ToSomething.swift */; };
 		D56670942C159AB600A2FAF2 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56670932C159AB600A2FAF2 /* CustomProgressView.swift */; };
 		D56670992C15ACFC00A2FAF2 /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56670982C15ACFC00A2FAF2 /* SideMenuView.swift */; };
+		D58BA2182C170F56003F3BDD /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58BA2172C170F56003F3BDD /* HomeViewModel.swift */; };
 		D5A92CD92C14270B00E6952E /* UberSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A92CD82C14270B00E6952E /* UberSwiftUIApp.swift */; };
 		D5A92CDD2C14270E00E6952E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5A92CDC2C14270E00E6952E /* Assets.xcassets */; };
 		D5A92CE02C14270E00E6952E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5A92CDF2C14270E00E6952E /* Preview Assets.xcassets */; };
@@ -68,6 +69,7 @@
 		D566708E2C158B9700A2FAF2 /* ToSomething.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSomething.swift; sourceTree = "<group>"; };
 		D56670932C159AB600A2FAF2 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		D56670982C15ACFC00A2FAF2 /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
+		D58BA2172C170F56003F3BDD /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		D5A92CD52C14270B00E6952E /* UberSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5A92CD82C14270B00E6952E /* UberSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberSwiftUIApp.swift; sourceTree = "<group>"; };
 		D5A92CDC2C14270E00E6952E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 		D5A92CEB2C14277400E6952E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				D58BA2172C170F56003F3BDD /* HomeViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -504,6 +507,7 @@
 				D5A92CD92C14270B00E6952E /* UberSwiftUIApp.swift in Sources */,
 				D56670882C1581E700A2FAF2 /* RootScreenViewModel.swift in Sources */,
 				D56670862C1581D300A2FAF2 /* RootScreen.swift in Sources */,
+				D58BA2182C170F56003F3BDD /* HomeViewModel.swift in Sources */,
 				D566708F2C158B9700A2FAF2 /* ToSomething.swift in Sources */,
 				D5333A9A2C15FDC200E7FB6A /* SaveLocationSearchView.swift in Sources */,
 				D5A92D172C14E7F800E6952E /* LoginView.swift in Sources */,

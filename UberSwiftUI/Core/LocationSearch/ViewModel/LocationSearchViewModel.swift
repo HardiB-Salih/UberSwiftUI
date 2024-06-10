@@ -8,7 +8,6 @@
 import Foundation
 import MapKit
 import SwiftUI
-import MapKit
 import Combine
 import Firebase
 
@@ -32,7 +31,7 @@ class LocationSearchViewModel: NSObject, ObservableObject {
         }
     }
     
-    var userLocation: CLLocation?
+    var userLocation: CLLocationCoordinate2D?
     
     // MARK: Lifecycle
     override init() {
@@ -113,10 +112,11 @@ extension LocationSearchViewModel {
      */
     func computeRidePrice(forType type: RideType) -> Double {
         guard let coordinate = selectedUberLocation?.coordinate else { return 0.0 }
-        guard let userLocation = self.userLocation else { return 0.0 }
+        guard let userCordinate = self.userLocation else { return 0.0 }
         
         let destination = CLLocation(latitude: coordinate.latitude,
                                      longitude: coordinate.longitude)
+        let userLocation = CLLocation(latitude: userCordinate.latitude, longitude: userCordinate.longitude)
         
         let tripDistanceinMeters = userLocation.distance(from: destination)
         return type.computePrice(for: tripDistanceinMeters)

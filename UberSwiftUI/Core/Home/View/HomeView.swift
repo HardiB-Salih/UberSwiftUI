@@ -12,6 +12,7 @@ struct HomeView: View {
     @State private var showSideMenu = false
     @State private var mapState = MapViewState.noInput
     @EnvironmentObject var locationViewModel: LocationSearchViewModel
+    @EnvironmentObject var homeViewModel : HomeViewModel
     
     init(userItem: UserItem) {
         self.userItem = userItem

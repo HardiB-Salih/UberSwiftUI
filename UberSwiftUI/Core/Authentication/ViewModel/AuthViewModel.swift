@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 @MainActor
 final class AuthViewModel: ObservableObject {
@@ -16,7 +17,7 @@ final class AuthViewModel: ObservableObject {
     @Published var fullname: String = ""
     @Published var errorState: (showError: Bool, errorMessage: String) = (false, "Uh Oh")
     
-    
+    var userLocation: CLLocationCoordinate2D?
     // MARK: -Computed Properties
     var disableLoginButton: Bool {
         return !email.isValidEmail || !password.isValidPassword || isLoading
@@ -29,9 +30,11 @@ final class AuthViewModel: ObservableObject {
 
     
     func handleSignUp() async throws {
+        guard let userLocation = self.userLocation else { return }
+//        print("User Location: \(userLocation.latitude), \(userLocation.longitude)")
         isLoading = true
         do {
-            try await AuthService.shared.createAccount(for: fullname, email: email, password: password)
+            try await AuthService.shared.createAccount(for: fullname, email: email, password: password, userLocation: userLocation)
         } catch {
             errorState.errorMessage = error.localizedDescription
             errorState.showError = true
