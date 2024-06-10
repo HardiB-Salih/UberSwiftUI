@@ -100,12 +100,15 @@ protocol AuthProvider {
 }
 
 final class AuthService: AuthProvider {
-    
-    
-    
+    private var userListener: ListenerRegistration?
     private init(){
         Task { await autoLogin() }
     }
+    
+    deinit {
+        stopListeningToCurrentUserInfo()
+    }
+    
     
     static var shared: AuthProvider = AuthService()
     var authState = CurrentValueSubject<AuthState, Never>(.pending)
@@ -114,8 +117,10 @@ final class AuthService: AuthProvider {
     func autoLogin() async {
         if Auth.auth().currentUser == nil {
             self.authState.send(.loggedOut)
+            stopListeningToCurrentUserInfo()
         } else {
-            fetchCurrentUserInfo()
+            //            fetchCurrentUserInfo()
+            startListeningToCurrentUserInfo()
         }
     }
     
@@ -136,7 +141,12 @@ final class AuthService: AuthProvider {
             let authResult = try await Auth.auth().createUser(withEmail: email, password: password)
             //store new user in out database
             let uid = authResult.user.uid
-            let newUser = UserItem(uid: uid, fullname: fullname, email: email)
+            let newUser = UserItem(uid: uid,
+                                   fullname: fullname,
+                                   email: email,
+                                   accountType: .driver,
+                                   coordinates: GeoPoint(latitude: 40.74688, longitude: 31.622133))
+            
             try await saveUserInfoDatabase(user: newUser)
             
             //This is publish the new user information with this call
@@ -155,7 +165,6 @@ final class AuthService: AuthProvider {
         
         do {
             try await Firestore.firestore().collection("users").document(currentUid).updateData([key: encodeSavedLocation])
-            fetchCurrentUserInfo()
         } catch {
             print("🔐 Failed to update user location info: \(error.localizedDescription)")
         }
@@ -185,10 +194,11 @@ extension AuthService {
     }
     
     
+    
     private func fetchCurrentUserInfo() {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        
-        Firestore.firestore().collection("users").document(currentUid).getDocument(as: UserItem.self) { [ weak self ] result in
+        let USER_REF = Firestore.firestore().collection("users")
+        USER_REF.document(currentUid).getDocument(as: UserItem.self) { [ weak self ] result in
             switch result {
             case .success(let loggedInUser):
                 //This is publish the user information
@@ -198,5 +208,41 @@ extension AuthService {
                 print("🔐 Faild to get current user Info: \(error.localizedDescription)")
             }
         }
+    }
+    
+    private func startListeningToCurrentUserInfo() {
+        guard let currentUid = Auth.auth().currentUser?.uid else {
+            self.authState.send(.loggedOut)
+            return
+        }
+        
+        let USER_REF = Firestore.firestore().collection("users").document(currentUid)
+        
+        userListener = USER_REF.addSnapshotListener { [weak self] documentSnapshot, error in
+            guard let self = self else { return }
+            if let error = error {
+                print("🔐 Failed to get current user info: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = documentSnapshot else {
+                print("🔐 Document snapshot is nil")
+                return
+            }
+            
+            do {
+                let loggedInUser = try document.data(as: UserItem.self)
+                // Publish the user information
+                self.authState.send(.loggedIn(loggedInUser))
+                print("🙋‍♂️ \(loggedInUser.fullname) is Logged In")
+            } catch {
+                print("🔐 Failed to decode user info: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func stopListeningToCurrentUserInfo() {
+        userListener?.remove()
+        userListener = nil
     }
 }

@@ -38,7 +38,7 @@ struct SettingsView: View {
                     } label: {
                         SettingCell(title: viewModel.title,
                                     iconName: viewModel.iconName,
-                                    subTitle: viewModel.subtitle)
+                                    subTitle: viewModel.subtitle(forUser: userItem))
                     }
                 }
                 
