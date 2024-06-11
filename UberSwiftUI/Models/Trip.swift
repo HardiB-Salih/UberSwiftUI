@@ -11,6 +11,9 @@ enum TripState : Int, Codable{
     case requested
     case rejected
     case accepted
+    case passangerCanceled
+    case driverCanceled
+
 }
 
 
@@ -36,7 +39,7 @@ struct Trip: Codable, Identifiable {
     
     //Update the trip
     var distanceToPassinger : Double
-    var travelToPassinger : Int
+    var travelTimeToPassinger : Int
     var state: TripState
 }
 
@@ -58,7 +61,7 @@ extension Trip {
                      dropoffLocation: GeoPoint(latitude: 40.732748, longitude: 31.607795),
                      tripCost: 50.0, 
                      distanceToPassinger: 1000,
-                     travelToPassinger: 24,
+                     travelTimeToPassinger: 24,
                      state: .requested)
     }
     
@@ -77,7 +80,7 @@ extension Trip {
                      dropoffLocation: GeoPoint(latitude: 37.7849, longitude: -122.4094),
                      tripCost: 25.50,
                      distanceToPassinger: 1000,
-                     travelToPassinger: 24,
+                     travelTimeToPassinger: 24,
                      state: .accepted)
     }
 }
@@ -86,4 +89,6 @@ extension String {
     static let state = "state"
     static let passingerUid = "passingerUid"
     static let driverUid = "driverUid"
+    static let distanceToPassinger = "distanceToPassinger"
+    static let travelTimeToPassinger = "travelTimeToPassinger"
 }

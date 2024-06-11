@@ -31,6 +31,9 @@
 		D56EB9802C188CA90004EECD /* TripLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB97F2C188CA80004EECD /* TripLoadingView.swift */; };
 		D56EB9822C188D570004EECD /* TripAcceptingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB9812C188D570004EECD /* TripAcceptingView.swift */; };
 		D56EB9842C188D630004EECD /* TripRejectingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB9832C188D630004EECD /* TripRejectingView.swift */; };
+		D56EB9862C1891010004EECD /* Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB9852C1891000004EECD /* Spinner.swift */; };
+		D56EB98A2C18A73E0004EECD /* PickupPassengerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB9892C18A73E0004EECD /* PickupPassengerView.swift */; };
+		D56EB98C2C18DBDE0004EECD /* TripCanceledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB98B2C18DBDD0004EECD /* TripCanceledView.swift */; };
 		D58BA2182C170F56003F3BDD /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58BA2172C170F56003F3BDD /* HomeViewModel.swift */; };
 		D58BA21A2C1718DF003F3BDD /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58BA2192C1718DF003F3BDD /* DriverAnnotation.swift */; };
 		D58BA21D2C171DF1003F3BDD /* DriverAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58BA21C2C171DF1003F3BDD /* DriverAnnotationView.swift */; };
@@ -82,6 +85,9 @@
 		D56EB97F2C188CA80004EECD /* TripLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripLoadingView.swift; sourceTree = "<group>"; };
 		D56EB9812C188D570004EECD /* TripAcceptingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripAcceptingView.swift; sourceTree = "<group>"; };
 		D56EB9832C188D630004EECD /* TripRejectingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRejectingView.swift; sourceTree = "<group>"; };
+		D56EB9852C1891000004EECD /* Spinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spinner.swift; sourceTree = "<group>"; };
+		D56EB9892C18A73E0004EECD /* PickupPassengerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupPassengerView.swift; sourceTree = "<group>"; };
+		D56EB98B2C18DBDD0004EECD /* TripCanceledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCanceledView.swift; sourceTree = "<group>"; };
 		D58BA2172C170F56003F3BDD /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		D58BA2192C1718DF003F3BDD /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		D58BA21C2C171DF1003F3BDD /* DriverAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotationView.swift; sourceTree = "<group>"; };
@@ -197,6 +203,7 @@
 		D56670922C159AA900A2FAF2 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D56EB9852C1891000004EECD /* Spinner.swift */,
 				D56670932C159AB600A2FAF2 /* CustomProgressView.swift */,
 				D5D381382C15D87C00EBB02F /* RoundedImageView.swift */,
 			);
@@ -225,6 +232,25 @@
 			children = (
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		D56EB9872C18A6A50004EECD /* Drivers */ = {
+			isa = PBXGroup;
+			children = (
+				D58BA2212C175BDF003F3BDD /* AcceptTripView.swift */,
+				D56EB9892C18A73E0004EECD /* PickupPassengerView.swift */,
+			);
+			path = Drivers;
+			sourceTree = "<group>";
+		};
+		D56EB9882C18A6AD0004EECD /* Passanges */ = {
+			isa = PBXGroup;
+			children = (
+				D56EB9812C188D570004EECD /* TripAcceptingView.swift */,
+				D56EB97F2C188CA80004EECD /* TripLoadingView.swift */,
+				D5A92D042C14882700E6952E /* RideRequestView.swift */,
+			);
+			path = Passanges;
 			sourceTree = "<group>";
 		};
 		D58BA21B2C171DE1003F3BDD /* Component */ = {
@@ -404,11 +430,10 @@
 		D5A92D032C1487EA00E6952E /* Trips */ = {
 			isa = PBXGroup;
 			children = (
-				D5A92D042C14882700E6952E /* RideRequestView.swift */,
-				D58BA2212C175BDF003F3BDD /* AcceptTripView.swift */,
-				D56EB97F2C188CA80004EECD /* TripLoadingView.swift */,
-				D56EB9812C188D570004EECD /* TripAcceptingView.swift */,
+				D56EB9882C18A6AD0004EECD /* Passanges */,
+				D56EB9872C18A6A50004EECD /* Drivers */,
 				D56EB9832C188D630004EECD /* TripRejectingView.swift */,
+				D56EB98B2C18DBDD0004EECD /* TripCanceledView.swift */,
 			);
 			path = Trips;
 			sourceTree = "<group>";
@@ -540,6 +565,7 @@
 				D5A92D102C14C0D000E6952E /* Date.swift in Sources */,
 				D5A92D192C14E80C00E6952E /* RegistrationView.swift in Sources */,
 				D5A92D122C14C59E00E6952E /* Color.swift in Sources */,
+				D56EB98A2C18A73E0004EECD /* PickupPassengerView.swift in Sources */,
 				D5BB0F3E2C150145008EF19D /* CustomTextField.swift in Sources */,
 				D5A92CF22C14296800E6952E /* LocationManager.swift in Sources */,
 				D56EB9802C188CA90004EECD /* TripLoadingView.swift in Sources */,
@@ -560,6 +586,7 @@
 				D58BA2182C170F56003F3BDD /* HomeViewModel.swift in Sources */,
 				D566708F2C158B9700A2FAF2 /* ToSomething.swift in Sources */,
 				D5333A9A2C15FDC200E7FB6A /* SaveLocationSearchView.swift in Sources */,
+				D56EB9862C1891010004EECD /* Spinner.swift in Sources */,
 				D5A92D172C14E7F800E6952E /* LoginView.swift in Sources */,
 				D5A92D0E2C14BB1300E6952E /* UberLocation.swift in Sources */,
 				D5333A9C2C16060300E7FB6A /* LocationSearchResultView.swift in Sources */,
@@ -571,6 +598,7 @@
 				D58BA2202C172DFF003F3BDD /* UserService.swift in Sources */,
 				D5A92CF82C14325600E6952E /* LocationSearchActivationView.swift in Sources */,
 				D5A92CFE2C143DA400E6952E /* LocationSearchResultCell.swift in Sources */,
+				D56EB98C2C18DBDE0004EECD /* TripCanceledView.swift in Sources */,
 				D5D381392C15D87C00EBB02F /* RoundedImageView.swift in Sources */,
 				D5A92D072C149D9F00E6952E /* RideType.swift in Sources */,
 				D56670942C159AB600A2FAF2 /* CustomProgressView.swift in Sources */,

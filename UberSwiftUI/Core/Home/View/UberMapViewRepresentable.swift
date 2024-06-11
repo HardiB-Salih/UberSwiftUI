@@ -34,14 +34,19 @@ struct UberMapViewRepresentable : UIViewRepresentable {
             //            print("🚀 drivers on map \(homeViewModel.drivers)")
             context.coordinator.addDriversToMap(drivers: viewModel.drivers)
             break
-        case .searchingForLocation:
-            break
         case .locationSelected:
             print("🚀 add the Annotation")
             if let coordinate =  viewModel.selectedUberLocation?.coordinate {
                 context.coordinator.addAndSelectAnnotation(withCoordinate: coordinate)
                 context.coordinator.configurePolyline(withDestinationCoordinate: coordinate)
             }
+            break
+        case .tripAccepted:
+            guard let trip = viewModel.trip else { return }
+            guard viewModel.currentUser.accountType == .driver else { return }
+            guard let routeToPickupLocation = viewModel.routeToPickupLocation else { return }
+            context.coordinator.configurePolylineToPickupLocation(withRoute: routeToPickupLocation)
+            context.coordinator.addAndSelectAnnotation(withCoordinate: trip.pickupLocation.toCLLocationCoordinate2D())
             break
         default:
             break
@@ -99,6 +104,16 @@ extension UberMapViewRepresentable {
         
         
         //MARK: - Helpers
+        func configurePolylineToPickupLocation(withRoute route: MKRoute) {
+            self.parent.mapView.addOverlay(route.polyline)
+//            self.parent.mapState = .polylineAdded
+            // if we want to shift the map when some view show in the bottom of the map
+            let rect = self.parent.mapView.mapRectThatFits(route.polyline.boundingMapRect,
+                                                           edgePadding: .init(top: 88, left: 32, bottom: 340, right: 32))
+            self.parent.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+        }
+        
+        
         
         /// Adds and selects a map annotation at the specified coordinate.
         /// - Parameter coordinate: The coordinate where the annotation will be placed.

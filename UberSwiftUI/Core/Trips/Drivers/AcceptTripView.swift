@@ -13,7 +13,7 @@ struct AcceptTripView: View {
     @State private var cameraPosition : MapCameraPosition
     @EnvironmentObject private var homeVM: HomeViewModel
     
-    init(trip: Trip) {
+    init(trip : Trip) {
         self.trip = trip
         let center = trip.pickupLocation.toCLLocationCoordinate2D()
         self._cameraPosition = State(initialValue: MapCameraPosition.region(.regionCreatorWithKilometers(center: center)))
@@ -39,7 +39,7 @@ struct AcceptTripView: View {
                     Spacer()
                     
                     VStack {
-                        Text(trip.travelToPassinger.toString()).bold()
+                        Text(trip.travelTimeToPassinger.toString()).bold()
                         Text("min").bold()
                     }
                     
@@ -165,9 +165,9 @@ struct AcceptTripView: View {
     }
 }
 
-#Preview {
-    AcceptTripView(trip: .placeholder)
-}
+//#Preview {
+//    AcceptTripView(trip: .placeholder)
+//}
 
 extension CLLocationCoordinate2D {
     static var userLocation : CLLocationCoordinate2D {

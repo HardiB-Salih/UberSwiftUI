@@ -12,8 +12,7 @@ struct HomeView: View {
     @State private var showSideMenu = false
     @State private var mapState = MapViewState.noInput
     @EnvironmentObject var homeViewModel: HomeViewModel
-    @State private var showAcceptTripView = false
-
+    
     init(userItem: UserItem) {
         self.userItem = userItem
     }
@@ -75,26 +74,16 @@ extension HomeView {
             }
             
             
-            //MARK: Passanger and Driver View
+            //MARK: Passanger and Driver Views
             switch userItem.accountType {
             case .passenger:
-                handlePassangerViews()
+                handlePassangerViews(mapState)
             case .driver:
-                handleDriveViews()
+                handleDriveViews(mapState)
             }
             
         }
         .ignoresSafeArea(edges: .bottom)
-        .onChange(of: homeViewModel.trip, { oldValue, newValue in
-            guard userItem.accountType == .driver else { return }
-            if newValue != nil {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    withAnimation {
-                        showAcceptTripView = true
-                    }
-                }
-            }
-        })
         .onReceive(homeViewModel.$selectedUberLocation) { location in
             if location != nil {
                 withAnimation(.spring) {
@@ -103,70 +92,82 @@ extension HomeView {
             }
         }
         .onReceive(homeViewModel.$trip) { trip in
-            guard let trip = trip else { return }
+            guard let trip = trip else {
+                self.mapState = .noInput
+                return
+            }
+            
             withAnimation(.smooth) {
                 switch trip.state {
                 case .requested:
                     mapState = .tripRequested
-                    print("🚀  onReceive requested")
                 case .rejected:
                     mapState = .tripRejected
-                    print("🚀  onReceive rejected")
                 case .accepted:
                     mapState = .tripAccepted
-                    print("🚀  onReceive accepted")
+                case .passangerCanceled:
+                    mapState = .tripCancelledByPassenger
+                case .driverCanceled:
+                    mapState = .tripCancelledByDriver
                 }
             }
         }
     }
-
 }
+
 
 //MARK: - handlePassangerViews()
 extension HomeView {
     @ViewBuilder
-    func handlePassangerViews() -> some View {
-        if mapState == .locationSelected || mapState == .polylineAdded {
-            RideRequestView()
-                .transition(.asymmetric(
-                    insertion: .move(edge: .bottom),
-                    removal: .move(edge: .top)))
-        } else if mapState == .tripRequested {
-           // show trip Requested or Loading View
-            TripLoadingView()
-                .transition(.asymmetric(
-                    insertion: .move(edge: .bottom),
-                    removal: .move(edge: .top)))
-        } else if  mapState == .tripAccepted {
-            // show trip Accepted view
-            TripAcceptingView()
-                .transition(.asymmetric(
-                    insertion: .move(edge: .bottom),
-                    removal: .move(edge: .top)))
-        } else if  mapState == .tripRejected {
-            // show trip Rejected view
-            TripRejectingView()
-                .transition(.asymmetric(
-                    insertion: .move(edge: .bottom),
-                    removal: .move(edge: .top)))
+    func handlePassangerViews(_ state: MapViewState) -> some View {
+        Group {
+            switch state {
+            case .locationSelected, .polylineAdded:
+                RideRequestView()
+            case .tripRequested:
+                TripLoadingView()
+            case .tripRejected:
+                TripRejectingView()
+            case .tripAccepted:
+                TripAcceptingView()
+            case .tripCancelledByPassenger:
+                TripCanceledView(message: "Your trip has been canceled.")
+            case .tripCancelledByDriver:
+                TripCanceledView(message: "Your driver Cancel this trip.")
+            default:
+                EmptyView()
+            }
         }
-    }
-    
+        .transition(.asymmetric(
+            insertion: .move(edge: .bottom),
+            removal: .move(edge: .top)))
+        
+    }  
 }
+
 
 //MARK: - handleDriveViews
 extension HomeView {
     @ViewBuilder
-    func handleDriveViews() -> some View {
-        if showAcceptTripView, let trip = homeViewModel.trip {
-            AcceptTripView(trip: trip)
-                .transition(.asymmetric(
-                    insertion: .move(edge: .bottom),
-                    removal: .move(edge: .top)))
+    func handleDriveViews(_ state: MapViewState) -> some View {
+        Group {
+            switch state {
+            case .tripRequested:
+                if let trip = homeViewModel.trip {
+                    AcceptTripView(trip: trip)
+                }
+            case .tripAccepted:
+                PickupPassengerView()
+            case .tripCancelledByPassenger:
+                TripCanceledView(message: "The trip has been canceld by the passenger.")
+            case .tripCancelledByDriver:
+                TripCanceledView(message: "Your trip has been canceled.")
+            default:
+                EmptyView()
+            }
         }
+        .transition(.asymmetric(
+            insertion: .move(edge: .bottom),
+            removal: .move(edge: .top)))
     }
 }
-
-//#Preview {
-//    HomeView(userItem: .placeholder)
-//}

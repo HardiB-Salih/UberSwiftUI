@@ -24,6 +24,7 @@ class HomeViewModel: NSObject, ObservableObject {
     @Published var drivers : [UserItem] = []
     @Published var trip: Trip?
     
+    
     private let searchCompleter = MKLocalSearchCompleter()
     
     var queryFragment: String = "" {
@@ -34,7 +35,7 @@ class HomeViewModel: NSObject, ObservableObject {
     
     var userLocation: CLLocationCoordinate2D?
     var currentUser: UserItem
-    
+    var routeToPickupLocation: MKRoute?
     
     // MARK: Lifecycle
     init(currentUser: UserItem) {
@@ -46,7 +47,8 @@ class HomeViewModel: NSObject, ObservableObject {
             Task { await fetchDriverUsers(currentUser) }
             addTripObserverForPassenger()
         } else {
-            fetchTrips()
+//            fetchTrips()
+            addTripObserverForDriver()
            
         }
         
@@ -372,7 +374,7 @@ extension HomeViewModel {
                             
                             tripCost: tripCost,
                             distanceToPassinger: 0,
-                            travelToPassinger: 0,
+                            travelTimeToPassinger: 0,
                             state: .requested
             )
             
@@ -383,38 +385,60 @@ extension HomeViewModel {
             }
         }
     }
+    
+    func cancelTripAsPassanger(){
+        updateTripState(withTripState: .passangerCanceled)
+    }
 }
 
 
 //MARK: - Driver API
 extension HomeViewModel {
     
-    func fetchTrips() {
-//        guard currentUser.accountType == .driver else { return }
+    func addTripObserverForDriver() {
+        print("🫣 Adding trip observer for passenger")
         let tripRef = Firestore.firestore().collection("trips")
-        let query = tripRef.whereField("driverUid", isEqualTo: currentUser.uid)
+        let query = tripRef.whereField(.driverUid, isEqualTo: currentUser.uid)
         
-        query.getDocuments { snapshot, error in
+        query.addSnapshotListener { snapshot, error in
             if let error = error {
-                print("🙀 Faild to get trip becase \(error.localizedDescription)")
+                print("🫣 Error fetching trip updates: \(error.localizedDescription)")
                 return
             }
             
-            guard let documents = snapshot?.documents else { return }
-            guard var trip = try? documents.first?.data(as: Trip.self) else { return }
+            guard let snapshot = snapshot else {
+                print("🫣 No snapshot data")
+                return
+            }
             
             
-            self.getDestinationRoute(from: trip.driverLocation.toCLLocationCoordinate2D(),
-                                     to: trip.pickupLocation.toCLLocationCoordinate2D()) { route in
-                trip.distanceToPassinger = route.distance
-                trip.travelToPassinger = route.expectedTravelTime.toMin
-                self.trip = trip
-//                print("🙋‍♂️ route.expectedTravelTime is \(route.expectedTravelTime / 60)") //min
-//                print("🙋‍♂️ route.distance \(route.distance.distanceInMiles())") //Meter
+            for change in snapshot.documentChanges {
+//                switch change.type {
+//                case .added:
+//                    print("🫣 Trip added")
+//                case .modified:
+//                    print("🫣 Trip modified")
+//                case .removed:
+//                    print("🫣 Trip removed")
+//                }
+
+                do {
+                    var trip = try change.document.data(as: Trip.self)
+                    self.getDestinationRoute(from: trip.driverLocation.toCLLocationCoordinate2D(),
+                                             to: trip.pickupLocation.toCLLocationCoordinate2D()) { route in
+                        self.routeToPickupLocation = route
+                        trip.distanceToPassinger = route.distance
+                        trip.travelTimeToPassinger = route.expectedTravelTime.toMin
+                        self.trip = trip
+                        
+                    }
+                    print("🫣 Updated trip state is \(trip.state)")
+                } catch let error {
+                    print("🫣 Error decoding trip: \(error)")
+                }
             }
         }
     }
-    
     
     func rejectTrip(){
         updateTripState(withTripState: .rejected)
@@ -424,14 +448,33 @@ extension HomeViewModel {
         updateTripState(withTripState: .accepted)
     }
     
+    func cancelTripAsDriver(){
+        updateTripState(withTripState: .driverCanceled)
+    }
+    
     
     func updateTripState(withTripState state: TripState) {
         guard let trip = trip else { return }
+        var data : [String: Any] = [ .state : state.rawValue ]
+
+        if state == .accepted {
+            data[.travelTimeToPassinger] = trip.travelTimeToPassinger
+        }
+        
         let tripRef = Firestore.firestore().collection("trips")
-        let data : [String: Any] = [ .state : state.rawValue ]
         tripRef.document(trip.id).updateData(data) { _ in
             print("🫣 Did Update trip with state \(state)")
         }
+    }
+    
+    
+    func deleteTrip() {
+        guard let trip = trip else { return }
+        let tripRef = Firestore.firestore().collection("trips")
+        tripRef.document(trip.id).delete { _ in
+            self.trip = nil
+        }
+        
     }
     
     
