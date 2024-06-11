@@ -22,6 +22,7 @@ class HomeViewModel: NSObject, ObservableObject {
     @Published var pickupTime: String?
     @Published var dropOfTime: String?
     @Published var drivers : [UserItem] = []
+    @Published var trip: Trip?
     
     private let searchCompleter = MKLocalSearchCompleter()
     
@@ -43,6 +44,8 @@ class HomeViewModel: NSObject, ObservableObject {
         ///If the current user's account type is not passenger, exit this initializer immediately.
         if currentUser.accountType == .passenger {
             Task { await fetchDriverUsers(currentUser) }
+        } else {
+            fetchTrips()
         }
         
         updateUserCity(forUsrrentUser: currentUser)
@@ -151,10 +154,11 @@ extension HomeViewModel {
     func computeRidePrice(forType type: RideType) -> Double {
         guard let coordinate = selectedUberLocation?.coordinate else { return 0.0 }
         guard let userCordinate = self.userLocation else { return 0.0 }
-        
+
         let destination = CLLocation(latitude: coordinate.latitude,
                                      longitude: coordinate.longitude)
-        let userLocation = CLLocation(latitude: userCordinate.latitude, longitude: userCordinate.longitude)
+        let userLocation = CLLocation(latitude: userCordinate.latitude, 
+                                      longitude: userCordinate.longitude)
         
         let tripDistanceinMeters = userLocation.distance(from: destination)
         return type.computePrice(for: tripDistanceinMeters)
@@ -204,6 +208,29 @@ extension HomeViewModel {
     }
     
     
+//    func getPlacemark(forLocation location: CLLocation, completion: @escaping (CLPlacemark?, Error?) -> Void) {
+//        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+//            if let error = error {
+//                completion(nil, error)
+//                return
+//            }
+//            
+//            guard let placemark = placemarks?.first else { return }
+//            completion(placemark, nil)
+//        }
+//    }
+    /// Retrieves a `CLPlacemark` for the given location using reverse geocoding.
+    ///
+    /// This function performs a reverse geocoding operation to convert a
+    /// `CLLocation` into a `CLPlacemark`. It uses a completion handler to return
+    /// the result asynchronously.
+    ///
+    /// - Parameters:
+    ///   - location: The `CLLocation` object representing the location to be reverse geocoded.
+    ///   - completion: A closure to be executed once the reverse geocoding completes.
+    ///     The closure takes two parameters:
+    ///     - `CLPlacemark?`: The resulting placemark, or `nil` if an error occurred.
+    ///     - `Error?`: An error object if an error occurred, or `nil` if the operation was successful.
     func getPlacemark(forLocation location: CLLocation, completion: @escaping (CLPlacemark?, Error?) -> Void) {
         CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
             if let error = error {
@@ -211,26 +238,77 @@ extension HomeViewModel {
                 return
             }
             
-            guard let placemark = placemarks?.first else { return }
+            let placemark = placemarks?.first
             completion(placemark, nil)
         }
+    }
+    
+//    func adressFromPlacemark(_ placemark: CLPlacemark) -> String{
+//        var result = ""
+//        
+//        if let thoroughfare = placemark.thoroughfare {
+//            result += thoroughfare
+//        }
+//        
+//        if let subThoroughfare = placemark.subThoroughfare {
+//            result += " \(subThoroughfare)"
+//        }
+//        
+//        if let subAdministrativeArea = placemark.subAdministrativeArea {
+//            result += ", \(subAdministrativeArea)"
+//        }
+//        
+//        return result
+//    }
+
+    /// Converts a `CLPlacemark` into a formatted address string.
+    ///
+    /// This function constructs an address string using the thoroughfare,
+    /// sub-thoroughfare, and sub-administrative area properties of the given
+    /// `CLPlacemark`.
+    ///
+    /// - Parameter placemark: The `CLPlacemark` to extract the address from.
+    /// - Returns: A formatted address string containing the thoroughfare,
+    ///   sub-thoroughfare, and sub-administrative area, if available.
+    func addressFromPlacemark(_ placemark: CLPlacemark) -> String {
+        var components: [String] = []
+        
+        if let thoroughfare = placemark.thoroughfare {
+            components.append(thoroughfare)
+        }
+        
+        if let subThoroughfare = placemark.subThoroughfare {
+            components.append(subThoroughfare)
+        }
+        
+        if let subAdministrativeArea = placemark.subAdministrativeArea {
+            components.append(subAdministrativeArea)
+        }
+        
+        return components.joined(separator: ", ")
     }
     
 }
 
 //MARK: - Passanger API
 extension HomeViewModel {
-    func requestTrip() {
+    func requestTrip(type: RideType = .uberX) {
         print("Debug: Request trip here ...")
         guard let driver = drivers.first else { return }
         guard let dropof = selectedUberLocation else { return }
         let dropoffLocation = GeoPoint(latitude: dropof.coordinate.latitude, longitude: dropof.coordinate.longitude)
         let userLocation = CLLocation(latitude: currentUser.coordinates.latitude, longitude:  currentUser.coordinates.longitude)
         let tripRef = Firestore.firestore().collection("trips").document()
-
+        let tripCost = self.computeRidePrice(forType: type)
+        print("Cost is \(tripCost)")
         getPlacemark(forLocation: userLocation) { [ weak self ] placemark, _ in
             guard let placemark = placemark, let self = self else { return }
             print("Debug: placemark for user location  is \(placemark)")
+            
+            
+            let pickupLocationAddress = self.addressFromPlacemark(placemark)
+
+            
             let trip = Trip(id: tripRef.documentID,
                             passingerUid: self.currentUser.uid,
                             passingerName: self.currentUser.fullname,
@@ -240,14 +318,17 @@ extension HomeViewModel {
                             driverName: driver.fullname,
                             driverLocation: driver.coordinates,
                             
-                            pickupName: placemark.name ?? "Apple ",
+                            pickupName: placemark.name ?? "Current Location",
                             pickupLocation: self.currentUser.coordinates,
-                            pickupLocationAddress: "123 main street",
+                            pickupLocationAddress: pickupLocationAddress,
                             
                             dropoffName: dropof.title,
                             dropoffLocation: dropoffLocation,
                             
-                            tripCost: 50)
+                            tripCost: tripCost,
+                            distanceToPassinger: 0,
+                            travelToPassinger: 0
+            )
             
             guard let encodedTrip = try? Firestore.Encoder().encode(trip) else { return }
             tripRef.setData(encodedTrip) { _ in
@@ -262,4 +343,29 @@ extension HomeViewModel {
 //MARK: - Driver API
 extension HomeViewModel {
     
+    func fetchTrips() {
+//        guard currentUser.accountType == .driver else { return }
+        let tripRef = Firestore.firestore().collection("trips")
+        let query = tripRef.whereField("driverUid", isEqualTo: currentUser.uid)
+        
+        query.addSnapshotListener { snapshot, error in
+            if let error = error {
+                print("🙀 Faild to get trip becase \(error.localizedDescription)")
+                return
+            }
+            
+            guard let documents = snapshot?.documents else { return }
+            guard var trip = try? documents.first?.data(as: Trip.self) else { return }
+            
+            
+            self.getDestinationRoute(from: trip.driverLocation.toCLLocationCoordinate2D(),
+                                     to: trip.pickupLocation.toCLLocationCoordinate2D()) { route in
+                trip.distanceToPassinger = route.distance
+                trip.travelToPassinger = route.expectedTravelTime.toMin
+                self.trip = trip
+//                print("🙋‍♂️ route.expectedTravelTime is \(route.expectedTravelTime / 60)") //min
+//                print("🙋‍♂️ route.distance \(route.distance.distanceInMiles())") //Meter
+            }
+        }
+    }
 }

@@ -9,14 +9,23 @@ import SwiftUI
 import MapKit
 
 struct AcceptTripView: View {
-  @State private var cameraPosition : MapCameraPosition = .region(.userRegin)
- 
+    let trip : Trip
+    @State private var cameraPosition : MapCameraPosition
+    
+    
+    init(trip: Trip) {
+        self.trip = trip
+        let center = trip.pickupLocation.toCLLocationCoordinate2D()
+        self._cameraPosition = State(initialValue: MapCameraPosition.region(.regionCreatorWithKilometers(center: center)))
+    }
+    
     var body: some View {
         VStack {
             Capsule()
                 .foregroundStyle(Color(.systemGray5))
                 .frame(width: 50, height: 6)
                 .padding(.top)
+            
             
             //MARK: would you like to pickup view
             VStack {
@@ -30,7 +39,7 @@ struct AcceptTripView: View {
                     Spacer()
                     
                     VStack {
-                        Text("10").bold()
+                        Text(trip.travelToPassinger.toString()).bold()
                         Text("min").bold()
                     }
                     
@@ -50,10 +59,10 @@ struct AcceptTripView: View {
                     RoundedImageView(.placeholderImageUrl, size: .large, shape: .circle, backgroundColor: .systemBlue)
                         .overlay {
                             Circle().stroke(Color(.systemGray4), lineWidth: 2)
-                                
+                            
                         }
                     VStack (alignment: .leading, spacing: 4){
-                        Text("JOHN DOE").fontWeight(.semibold)
+                        Text(trip.passingerName).fontWeight(.semibold)
                         HStack {
                             Image(systemName: "star.fill")
                                 .foregroundStyle(Color(.systemYellow))
@@ -63,12 +72,12 @@ struct AcceptTripView: View {
                                 .foregroundStyle(Color(.secondaryLabel))
                         }
                     }
-                   
+                    
                     Spacer()
                     
                     VStack (spacing: 6){
                         Text("Earning")
-                        Text("$22")
+                        Text(trip.tripCost.toCurrency())
                             .font(.system(size: 24, weight: .semibold))
                     }
                 }
@@ -80,9 +89,9 @@ struct AcceptTripView: View {
             VStack {
                 HStack {
                     VStack (alignment: .leading, spacing: 6){
-                        Text("Apple Campus")
+                        Text(trip.pickupName)
                             .font(.headline)
-                        Text("Infinit Loop 1, Santa Clara County")
+                        Text(trip.pickupLocationAddress)
                             .font(.subheadline)
                             .foregroundStyle(Color(.secondaryLabel))
                     }
@@ -90,7 +99,7 @@ struct AcceptTripView: View {
                     Spacer()
                     
                     VStack{
-                        Text("5.2")
+                        Text(trip.distanceToPassinger.distanceInMiles())
                             .font(.headline)
                             .fontWeight(.semibold)
                         Text("mi")
@@ -102,7 +111,7 @@ struct AcceptTripView: View {
                 
                 //Map
                 Map(position: $cameraPosition) {
-                    Marker("Coffee", coordinate: .userLocation)
+                    Marker(trip.pickupName, coordinate: trip.pickupLocation.toCLLocationCoordinate2D())
                 }
                 .frame(height: 220)
                 .clipShape(RoundedRectangle(cornerRadius: 25.0, style: .continuous))
@@ -125,7 +134,7 @@ struct AcceptTripView: View {
                         .background(Color(.systemRed))
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                        
+                    
                 })
                 
                 Button(action: {}, label: {
@@ -137,11 +146,11 @@ struct AcceptTripView: View {
                         .background(Color(.systemBlue))
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                        
+                    
                 })
             }
             .padding()
-
+            
         }
         .padding(.bottom, 30)
         .background(Color(.secondarySystemBackground))
@@ -153,7 +162,7 @@ struct AcceptTripView: View {
 }
 
 #Preview {
-    AcceptTripView()
+    AcceptTripView(trip: .placeholder)
 }
 
 extension CLLocationCoordinate2D {

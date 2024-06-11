@@ -15,7 +15,6 @@ class LocationManager : NSObject, ObservableObject {
 
     override init() {
         super.init()
-        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -27,8 +26,6 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locateion = locations.first else { return }
         self.userLocation = locateion.coordinate
-        
         locationManager.stopUpdatingLocation()
     }
 }
-

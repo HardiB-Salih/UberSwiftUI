@@ -12,6 +12,7 @@ struct HomeView: View {
     @State private var showSideMenu = false
     @State private var mapState = MapViewState.noInput
     @EnvironmentObject var homeViewModel: HomeViewModel
+    @State private var showAcceptTripView = false
 
     init(userItem: UserItem) {
         self.userItem = userItem
@@ -81,13 +82,29 @@ extension HomeView {
                         removal: .move(edge: .top)))
             }
             
-        }
-        .ignoresSafeArea(edges: .bottom)
-        .onReceive(LocationManager.shared.$userLocation) { location in
-            if let location = location {
-                homeViewModel.userLocation = location
+            
+
+            if showAcceptTripView, let trip = homeViewModel.trip {
+                AcceptTripView(trip: trip)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .bottom),
+                        removal: .move(edge: .top)))
             }
         }
+        .ignoresSafeArea(edges: .bottom)
+        .onChange(of: homeViewModel.trip, { oldValue, newValue in
+            print("onAppear")
+            if newValue != nil {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    print("DispatchQueue")
+                    withAnimation {
+                        print("withAnimation")
+
+                        showAcceptTripView = true
+                    }
+                }
+            }
+        })
         .onReceive(homeViewModel.$selectedUberLocation) { location in
             if location != nil {
                 withAnimation(.spring) {
@@ -95,11 +112,6 @@ extension HomeView {
                 }
             }
         }
-//        .onReceive(LocationManager.shared.$userLocation) { location in
-//            if let location = location {
-//                homeViewModel.userLocation = location
-//            }
-//        }
     }
 }
 

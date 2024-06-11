@@ -71,6 +71,7 @@ extension UberMapViewRepresentable {
         //MARK: - MKMapViewDelegate
         // This method is called whenever the user's location is updated.
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+            self.parent.viewModel.userLocation = userLocation.coordinate
             self.userLocationCoordinate = userLocation.coordinate
             
             // Show User Location on map

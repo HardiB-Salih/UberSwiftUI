@@ -8,7 +8,8 @@
 import Foundation
 import CoreLocation
 
-struct UberLocation {
+struct UberLocation  : Identifiable{
+    let id: String = UUID().uuidString
     let title: String
     let coordinate: CLLocationCoordinate2D
 }
