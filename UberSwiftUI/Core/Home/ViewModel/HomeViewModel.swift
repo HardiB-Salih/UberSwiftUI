@@ -44,11 +44,14 @@ class HomeViewModel: NSObject, ObservableObject {
         ///If the current user's account type is not passenger, exit this initializer immediately.
         if currentUser.accountType == .passenger {
             Task { await fetchDriverUsers(currentUser) }
+            addTripObserverForPassenger()
         } else {
             fetchTrips()
+           
         }
         
         updateUserCity(forUsrrentUser: currentUser)
+        
     }
     
     
@@ -292,6 +295,48 @@ extension HomeViewModel {
 
 //MARK: - Passanger API
 extension HomeViewModel {
+
+
+    func addTripObserverForPassenger() {
+        print("🫣 Adding trip observer for passenger")
+        let tripRef = Firestore.firestore().collection("trips")
+        let query = tripRef.whereField(.passingerUid, isEqualTo: currentUser.uid)
+        
+        query.addSnapshotListener { snapshot, error in
+            if let error = error {
+                print("🫣 Error fetching trip updates: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let snapshot = snapshot else {
+                print("🫣 No snapshot data")
+                return
+            }
+            
+            
+            for change in snapshot.documentChanges {
+//                switch change.type {
+//                case .added:
+//                    print("🫣 Trip added")
+//                case .modified:
+//                    print("🫣 Trip modified")
+//                case .removed:
+//                    print("🫣 Trip removed")
+//                }
+
+                do {
+                    let trip = try change.document.data(as: Trip.self)
+                    self.trip = trip
+                    print("🫣 Updated trip state is \(trip.state)")
+                } catch let error {
+                    print("🫣 Error decoding trip: \(error)")
+                }
+            }
+        }
+    }
+    
+    
+    
     func requestTrip(type: RideType = .uberX) {
         print("Debug: Request trip here ...")
         guard let driver = drivers.first else { return }
@@ -327,7 +372,8 @@ extension HomeViewModel {
                             
                             tripCost: tripCost,
                             distanceToPassinger: 0,
-                            travelToPassinger: 0
+                            travelToPassinger: 0,
+                            state: .requested
             )
             
             guard let encodedTrip = try? Firestore.Encoder().encode(trip) else { return }
@@ -348,7 +394,7 @@ extension HomeViewModel {
         let tripRef = Firestore.firestore().collection("trips")
         let query = tripRef.whereField("driverUid", isEqualTo: currentUser.uid)
         
-        query.addSnapshotListener { snapshot, error in
+        query.getDocuments { snapshot, error in
             if let error = error {
                 print("🙀 Faild to get trip becase \(error.localizedDescription)")
                 return
@@ -368,4 +414,25 @@ extension HomeViewModel {
             }
         }
     }
+    
+    
+    func rejectTrip(){
+        updateTripState(withTripState: .rejected)
+    }
+    
+    func acceptTrip(){
+        updateTripState(withTripState: .accepted)
+    }
+    
+    
+    func updateTripState(withTripState state: TripState) {
+        guard let trip = trip else { return }
+        let tripRef = Firestore.firestore().collection("trips")
+        let data : [String: Any] = [ .state : state.rawValue ]
+        tripRef.document(trip.id).updateData(data) { _ in
+            print("🫣 Did Update trip with state \(state)")
+        }
+    }
+    
+    
 }

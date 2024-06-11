@@ -13,7 +13,7 @@ struct UberMapViewRepresentable : UIViewRepresentable {
     let locationManager = LocationManager.shared
     @Binding var mapState: MapViewState
     @EnvironmentObject private var viewModel : HomeViewModel
-//    let homeViewModel : HomeViewModel
+    //    let homeViewModel : HomeViewModel
     
     
     func makeUIView(context: Context) -> some UIView {
@@ -43,7 +43,7 @@ struct UberMapViewRepresentable : UIViewRepresentable {
                 context.coordinator.configurePolyline(withDestinationCoordinate: coordinate)
             }
             break
-        case .polylineAdded:
+        default:
             break
         }
     }

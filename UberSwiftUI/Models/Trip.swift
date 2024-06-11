@@ -7,6 +7,13 @@
 
 import Firebase
 
+enum TripState : Int, Codable{
+    case requested
+    case rejected
+    case accepted
+}
+
+
 struct Trip: Codable, Identifiable {
     let id: String
     
@@ -30,6 +37,7 @@ struct Trip: Codable, Identifiable {
     //Update the trip
     var distanceToPassinger : Double
     var travelToPassinger : Int
+    var state: TripState
 }
 
 extension Trip : Equatable { }
@@ -48,22 +56,34 @@ extension Trip {
                      pickupLocationAddress: "123 main street",
                      dropoffName: "Burger King",
                      dropoffLocation: GeoPoint(latitude: 40.732748, longitude: 31.607795),
-                     tripCost: 50.0, distanceToPassinger: 1000, travelToPassinger: 24)
+                     tripCost: 50.0, 
+                     distanceToPassinger: 1000,
+                     travelToPassinger: 24,
+                     state: .requested)
     }
     
-//    static var johnDoe : Trip {
-//        return .init(id: "1",
-//                     passingerUid: "passenger123",
-//                     passingerName: "John Doe",
-//                     passingerLocation: GeoPoint(latitude: 37.7749, longitude: -122.4194),
-//                     driverUid: "driver123",
-//                     driverName: "Jane Smith",
-//                     driverLocation: GeoPoint(latitude: 37.7749, longitude: -122.4194),
-//                     pickupName: "Pickup Location",
-//                     pickupLocation: GeoPoint(latitude: 37.7749, longitude: -122.4194),
-//                     pickupLocationAddress: "123 Main St, San Francisco, CA",
-//                     dropoffName: "Dropoff Location",
-//                     dropoffLocation: GeoPoint(latitude: 37.7849, longitude: -122.4094),
-//                     tripCost: 25.50, distanceToPassinger: 1000, travelToPassinger: 24)
-//    }
+    static var johnDoe : Trip {
+        return .init(id: "1",
+                     passingerUid: "passenger123",
+                     passingerName: "John Doe",
+                     passingerLocation: GeoPoint(latitude: 37.7749, longitude: -122.4194),
+                     driverUid: "driver123",
+                     driverName: "Jane Smith",
+                     driverLocation: GeoPoint(latitude: 37.7749, longitude: -122.4194),
+                     pickupName: "Pickup Location",
+                     pickupLocation: GeoPoint(latitude: 37.7749, longitude: -122.4194),
+                     pickupLocationAddress: "123 Main St, San Francisco, CA",
+                     dropoffName: "Dropoff Location",
+                     dropoffLocation: GeoPoint(latitude: 37.7849, longitude: -122.4094),
+                     tripCost: 25.50,
+                     distanceToPassinger: 1000,
+                     travelToPassinger: 24,
+                     state: .accepted)
+    }
+}
+
+extension String {
+    static let state = "state"
+    static let passingerUid = "passingerUid"
+    static let driverUid = "driverUid"
 }

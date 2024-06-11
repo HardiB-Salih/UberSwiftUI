@@ -11,7 +11,7 @@ import MapKit
 struct AcceptTripView: View {
     let trip : Trip
     @State private var cameraPosition : MapCameraPosition
-    
+    @EnvironmentObject private var homeVM: HomeViewModel
     
     init(trip: Trip) {
         self.trip = trip
@@ -125,7 +125,9 @@ struct AcceptTripView: View {
             
             //MARK: action buttons
             HStack {
-                Button(action: {}, label: {
+                Button(action: {
+                    homeVM.rejectTrip()
+                }, label: {
                     Text("Reject")
                         .font(.headline)
                         .fontWeight(.bold)
@@ -137,7 +139,9 @@ struct AcceptTripView: View {
                     
                 })
                 
-                Button(action: {}, label: {
+                Button(action: {
+                    homeVM.acceptTrip()
+                }, label: {
                     Text("Accept")
                         .font(.headline)
                         .fontWeight(.bold)

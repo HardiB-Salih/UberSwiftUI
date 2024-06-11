@@ -44,7 +44,7 @@ struct MapViewActionButton: View {
             
         case .searchingForLocation:
             mapState = .noInput
-        case .locationSelected, .polylineAdded:
+        case .locationSelected, .polylineAdded, .tripRequested, .tripRejected, .tripAccepted:
             print("☎️ Clear the Map View")
             mapState = .noInput
             viewModel.selectedUberLocation = nil

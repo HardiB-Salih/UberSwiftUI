@@ -75,31 +75,21 @@ extension HomeView {
             }
             
             
-            if mapState == .locationSelected  || mapState == .polylineAdded  {
-                RideRequestView()
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .bottom),
-                        removal: .move(edge: .top)))
+            //MARK: Passanger and Driver View
+            switch userItem.accountType {
+            case .passenger:
+                handlePassangerViews()
+            case .driver:
+                handleDriveViews()
             }
             
-            
-
-            if showAcceptTripView, let trip = homeViewModel.trip {
-                AcceptTripView(trip: trip)
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .bottom),
-                        removal: .move(edge: .top)))
-            }
         }
         .ignoresSafeArea(edges: .bottom)
         .onChange(of: homeViewModel.trip, { oldValue, newValue in
-            print("onAppear")
+            guard userItem.accountType == .driver else { return }
             if newValue != nil {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    print("DispatchQueue")
                     withAnimation {
-                        print("withAnimation")
-
                         showAcceptTripView = true
                     }
                 }
@@ -111,6 +101,68 @@ extension HomeView {
                     self.mapState = .locationSelected
                 }
             }
+        }
+        .onReceive(homeViewModel.$trip) { trip in
+            guard let trip = trip else { return }
+            withAnimation(.smooth) {
+                switch trip.state {
+                case .requested:
+                    mapState = .tripRequested
+                    print("🚀  onReceive requested")
+                case .rejected:
+                    mapState = .tripRejected
+                    print("🚀  onReceive rejected")
+                case .accepted:
+                    mapState = .tripAccepted
+                    print("🚀  onReceive accepted")
+                }
+            }
+        }
+    }
+
+}
+
+//MARK: - handlePassangerViews()
+extension HomeView {
+    @ViewBuilder
+    func handlePassangerViews() -> some View {
+        if mapState == .locationSelected || mapState == .polylineAdded {
+            RideRequestView()
+                .transition(.asymmetric(
+                    insertion: .move(edge: .bottom),
+                    removal: .move(edge: .top)))
+        } else if mapState == .tripRequested {
+           // show trip Requested or Loading View
+            TripLoadingView()
+                .transition(.asymmetric(
+                    insertion: .move(edge: .bottom),
+                    removal: .move(edge: .top)))
+        } else if  mapState == .tripAccepted {
+            // show trip Accepted view
+            TripAcceptingView()
+                .transition(.asymmetric(
+                    insertion: .move(edge: .bottom),
+                    removal: .move(edge: .top)))
+        } else if  mapState == .tripRejected {
+            // show trip Rejected view
+            TripRejectingView()
+                .transition(.asymmetric(
+                    insertion: .move(edge: .bottom),
+                    removal: .move(edge: .top)))
+        }
+    }
+    
+}
+
+//MARK: - handleDriveViews
+extension HomeView {
+    @ViewBuilder
+    func handleDriveViews() -> some View {
+        if showAcceptTripView, let trip = homeViewModel.trip {
+            AcceptTripView(trip: trip)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .bottom),
+                    removal: .move(edge: .top)))
         }
     }
 }

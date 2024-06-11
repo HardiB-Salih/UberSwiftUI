@@ -28,6 +28,9 @@
 		D56670942C159AB600A2FAF2 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56670932C159AB600A2FAF2 /* CustomProgressView.swift */; };
 		D56670992C15ACFC00A2FAF2 /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56670982C15ACFC00A2FAF2 /* SideMenuView.swift */; };
 		D56EB9762C18295F0004EECD /* Location + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB9752C18295F0004EECD /* Location + Extensions.swift */; };
+		D56EB9802C188CA90004EECD /* TripLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB97F2C188CA80004EECD /* TripLoadingView.swift */; };
+		D56EB9822C188D570004EECD /* TripAcceptingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB9812C188D570004EECD /* TripAcceptingView.swift */; };
+		D56EB9842C188D630004EECD /* TripRejectingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EB9832C188D630004EECD /* TripRejectingView.swift */; };
 		D58BA2182C170F56003F3BDD /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58BA2172C170F56003F3BDD /* HomeViewModel.swift */; };
 		D58BA21A2C1718DF003F3BDD /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58BA2192C1718DF003F3BDD /* DriverAnnotation.swift */; };
 		D58BA21D2C171DF1003F3BDD /* DriverAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58BA21C2C171DF1003F3BDD /* DriverAnnotationView.swift */; };
@@ -76,6 +79,9 @@
 		D56670932C159AB600A2FAF2 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		D56670982C15ACFC00A2FAF2 /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 		D56EB9752C18295F0004EECD /* Location + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location + Extensions.swift"; sourceTree = "<group>"; };
+		D56EB97F2C188CA80004EECD /* TripLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripLoadingView.swift; sourceTree = "<group>"; };
+		D56EB9812C188D570004EECD /* TripAcceptingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripAcceptingView.swift; sourceTree = "<group>"; };
+		D56EB9832C188D630004EECD /* TripRejectingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRejectingView.swift; sourceTree = "<group>"; };
 		D58BA2172C170F56003F3BDD /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		D58BA2192C1718DF003F3BDD /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		D58BA21C2C171DF1003F3BDD /* DriverAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotationView.swift; sourceTree = "<group>"; };
@@ -400,6 +406,9 @@
 			children = (
 				D5A92D042C14882700E6952E /* RideRequestView.swift */,
 				D58BA2212C175BDF003F3BDD /* AcceptTripView.swift */,
+				D56EB97F2C188CA80004EECD /* TripLoadingView.swift */,
+				D56EB9812C188D570004EECD /* TripAcceptingView.swift */,
+				D56EB9832C188D630004EECD /* TripRejectingView.swift */,
 			);
 			path = Trips;
 			sourceTree = "<group>";
@@ -525,6 +534,7 @@
 				D58BA21A2C1718DF003F3BDD /* DriverAnnotation.swift in Sources */,
 				D58BA2222C175BDF003F3BDD /* AcceptTripView.swift in Sources */,
 				D58BA2242C178879003F3BDD /* Trip.swift in Sources */,
+				D56EB9842C188D630004EECD /* TripRejectingView.swift in Sources */,
 				D5A92D002C1445A400E6952E /* LocationSearchViewModel.swift in Sources */,
 				D5A92CFC2C143AEF00E6952E /* LocationSearchView.swift in Sources */,
 				D5A92D102C14C0D000E6952E /* Date.swift in Sources */,
@@ -532,9 +542,11 @@
 				D5A92D122C14C59E00E6952E /* Color.swift in Sources */,
 				D5BB0F3E2C150145008EF19D /* CustomTextField.swift in Sources */,
 				D5A92CF22C14296800E6952E /* LocationManager.swift in Sources */,
+				D56EB9802C188CA90004EECD /* TripLoadingView.swift in Sources */,
 				D5D381372C15C3A900EBB02F /* SideMenuOption.swift in Sources */,
 				D566707F2C157F5300A2FAF2 /* AuthService.swift in Sources */,
 				D5A92D052C14882700E6952E /* RideRequestView.swift in Sources */,
+				D56EB9822C188D570004EECD /* TripAcceptingView.swift in Sources */,
 				D5333A982C15FA0000E7FB6A /* SaveLocationViewModel.swift in Sources */,
 				D5333A9E2C160FBE00E7FB6A /* SavedLocations.swift in Sources */,
 				D5333A952C15E19000E7FB6A /* SettingsView.swift in Sources */,
